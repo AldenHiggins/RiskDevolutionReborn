@@ -1,11 +1,11 @@
-# Build and Release Folders
-bin/
-bin-debug/
-bin-release/
+# Ignore all compiled resources
+*.vpcf_c
+*.vtex_c
+*.vmat_c
+*.vsndevts_c
 
-# Other files and folders
-.settings/
+# Map Files
+*.vpk
 
-# Project files, i.e. `.project`, `.actionScriptProperties` and `.flexProperties`
-# should NOT be excluded as they contain compiler settings and other important
-# information for Eclipse / Flash Builder.
+# Cache crap that Valve autogenerates
+*.bin
