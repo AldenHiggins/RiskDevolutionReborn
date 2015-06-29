@@ -202,15 +202,16 @@ function GameMode:AllocateBases()
       base:SetTeam(teamNumber)
       local color = TEAM_COLORS[teamNumber]
       base:SetRenderColor(color[1], color[2], color[3])
+      base:RemoveModifierByName("modifier_invulnerable")
 
       local circle = Entities:FindByName(nil, territory .. " " .. baseNumber .. " Spawn")
       circle:SetTeam(teamNumber)
       circle:SetRenderColor(color[1], color[2], color[3])
 
-      local newUnit = CreateUnitByName("npc_dota_risk_rifleman", circle:GetOrigin(), true, nil, nil, teamNumber)
-      newUnit:SetRenderColor(color[1], color[2], color[3])
-      newUnit:GetChildren()[3]:SetRenderColor(color[1], color[2], color[3])
-      newUnit:SetUnitName(territory .. " " .. baseNumber)
+      -- local newUnit = CreateUnitByName("npc_dota_risk_rifleman", circle:GetOrigin(), true, nil, nil, teamNumber)
+      -- newUnit:SetRenderColor(color[1], color[2], color[3])
+      -- newUnit:GetChildren()[3]:SetRenderColor(color[1], color[2], color[3])
+      -- newUnit:SetUnitName(territory .. " " .. baseNumber)
 
       teamIndex = teamIndex + 1
       if teamIndex > 10 then
@@ -250,6 +251,7 @@ function GameMode:IncomeCheck()
         break
       end
     end
+
 
     -- If this territory is entirely owned by one player, add to their income
     if allTheSameTeam == true then
