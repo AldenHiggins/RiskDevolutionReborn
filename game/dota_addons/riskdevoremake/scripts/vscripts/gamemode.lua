@@ -25,6 +25,7 @@ require('internal/events')
 require('settings')
 -- events.lua is where you can specify the actions to be taken when any event occurs and is one of the core barebones files.
 require('events')
+require('utility')
 
 
 --[[
@@ -99,8 +100,8 @@ end
 ]]
 function GameMode:OnGameInProgress()
   DebugPrint("[BAREBONES] The game has officially begun")
-
-  Timers:CreateTimer(30, -- Start this timer 30 game-time seconds later
+  GameRules:GetGameModeEntity():SetThink( "IncomeCheck", self)
+  Timers:CreateTimer(0, -- Start this timer 30 game-time seconds later
     function()
       DebugPrint("This function is called 30 seconds after the game begins, and every 30 seconds thereafter")
       return 30.0 -- Rerun this timer every 30 game-time seconds 
@@ -136,21 +137,16 @@ function GameMode:InitGameMode()
   self.territories["Denmark"] = 2
   -- Eastern Europe
   self.territories["Greece"] = 4
-  self.territories["Albania"] = 2
-  self.territories["Macedonia"] = 2
-  self.territories["Montenegro"] = 2
   self.territories["Bosnia"] = 2
-  self.territories["Croatia"] = 2
   self.territories["Serbia"] = 2
   self.territories["Slovenia"] = 2
-  self.territories["Hungary"] = 2
   self.territories["Romania"] = 3
-  self.territories["Bulgaria"] = 2
+  self.territories["Bulgaria"] = 3
   self.territories["Ukraine"] = 7
   self.territories["Czech"] = 2
   self.territories["Moldova"] = 2
   self.territories["Slovakia"] = 2
-  self.territories["Austria"] = 2
+  self.territories["Austria"] = 3
   -- North Africa/Middle East
   self.territories["Libya"] = 3
   self.territories["Egypt"] = 4
@@ -181,103 +177,34 @@ function GameMode:InitGameMode()
 
   self.players = {}
   self.playerIncomes = {}
+  self.unitCount = {}
 
   GameMode:AllocateBases()
 
-  GameRules:GetGameModeEntity():SetThink( "IncomeCheck", self)
+  
+  local mode = GameRules:GetGameModeEntity()
+  -- Disables hero hud
+  mode:SetHUDVisible(1, false)
+  -- Disables shop
+  mode:SetHUDVisible(6, false)
 
+  print ("registering command")
+  Convars:RegisterCommand( "ExampleCommand", function(name, p)
+      --get the player that sent the command
+      local cmdPlayer = Convars:GetCommandClient()
+      if cmdPlayer then 
+          --if the player is valid, execute PlayerBuyAbilityPoint
+          return self:ExampleFunction( cmdPlayer, p ) 
+      end
+  end, "A player buys an ability point", 0 )
+  print ("done registering command")
   DebugPrint('[BAREBONES] Done loading Barebones gamemode!\n\n')
 end
 
-function GameMode:AllocateBases()
-  print("Allocating bases")
-  local teamIndex = 1
-  -- Iterate through all of the territories
-  for territory,totalBases in pairs(self.territories) do
-    -- Update all of the bases in the territory
-    for baseNumber = 1, totalBases do
-      local teamNumber = self.teamNumbers[teamIndex]
-      print (territory .. " " .. baseNumber)
-      local base = Entities:FindByName(nil, territory .. " " .. baseNumber)
-      base:SetTeam(teamNumber)
-      local color = TEAM_COLORS[teamNumber]
-      base:SetRenderColor(color[1], color[2], color[3])
-      base:RemoveModifierByName("modifier_invulnerable")
-
-      local circle = Entities:FindByName(nil, territory .. " " .. baseNumber .. " Spawn")
-      circle:SetTeam(teamNumber)
-      circle:SetRenderColor(color[1], color[2], color[3])
-
-      -- local newUnit = CreateUnitByName("npc_dota_risk_rifleman", circle:GetOrigin(), true, nil, nil, teamNumber)
-      -- newUnit:SetRenderColor(color[1], color[2], color[3])
-      -- newUnit:GetChildren()[3]:SetRenderColor(color[1], color[2], color[3])
-      -- newUnit:SetUnitName(territory .. " " .. baseNumber)
-
-      teamIndex = teamIndex + 1
-      if teamIndex > 10 then
-        teamIndex = 1
-      end
-    end
-  end
-  return 5
+function GameMode:ExampleFunction (playerPerformedCommand, p)
+  print ("The button was clicked!!!")
 end
 
-function GameMode:IncomeCheck()
-  -- Zero out all of the player incomes
-  for playerID,player in pairs(self.players) do
-    self.playerIncomes[playerID] = BASE_PLAYER_INCOME
-  end
-
-  -- Iterate through all of the territories
-  for territory, totalBases in pairs(self.territories) do
-    local allTheSameTeam = true
-    local base = Entities:FindByName(nil, territory .. " " .. 1)
-    local playerWhoMayOwnAllBases = base:GetOwner()
-    local territorySpawn = Entities:FindByName(nil, territory .. " Territory")
-    local territoryLabel = Entities:FindByName(nil, territory .. " Label")
-    -- Early quit out in case not all the players have connected yet
-    if playerWhoMayOwnAllBases == nil then
-      goto continue
-    end
-    -- print ("First base player: " .. playerWhoMayOwnAllBases)
-    -- Update all of the bases in the territory
-    for baseNumber = 2, totalBases do
-      local nextBase = Entities:FindByName(nil, territory .. " " .. baseNumber)
-      -- print ("This next player: " .. base:GetOwner())
-      if nextBase:GetOwner() ~= playerWhoMayOwnAllBases then
-        allTheSameTeam = false
-        territorySpawn:SetRenderColor(255, 255, 255)
-        territoryLabel:SetRenderColor(255, 255, 255)
-        break
-      end
-    end
-
-
-    -- If this territory is entirely owned by one player, add to their income
-    if allTheSameTeam == true then
-      print("Adding to the player's income!!!")
-      self.playerIncomes[playerWhoMayOwnAllBases:GetPlayerID()] = self.playerIncomes[playerWhoMayOwnAllBases:GetPlayerID()] + totalBases
-      local color = TEAM_COLORS[base:GetTeam()]
-      territorySpawn:SetRenderColor(color[1], color[2], color[3])
-      territoryLabel:SetRenderColor(color[1], color[2], color[3])
-
-      -- Generate free units every turn
-      -- local newUnit = CreateUnitByName("npc_dota_risk_rifleman", territorySpawn:GetOrigin(), true, nil, nil, base:GetTeam())
-      -- newUnit:SetRenderColor(color[1], color[2], color[3])
-      -- newUnit:GetChildren()[3]:SetRenderColor(color[1], color[2], color[3])
-      -- newUnit:SetOwner(base:GetOwner())
-      -- newUnit:SetControllableByPlayer(base:GetOwner():GetPlayerID(), true)
-    end
-
-    ::continue::
-  end
-
-
-  for playerID,player in pairs(self.players) do
-    PlayerResource:SetGold(playerID, PlayerResource:GetGold(playerID) + self.playerIncomes[playerID], true)
-  end
-  return 60
-end
 
 -- This is an example console command
 function GameMode:ExampleConsoleCommand()

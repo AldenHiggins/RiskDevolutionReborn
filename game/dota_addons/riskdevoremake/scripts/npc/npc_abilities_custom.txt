@@ -277,7 +277,7 @@
   "human_train_rifleman"
   {
     "BaseClass"             "ability_datadriven"
-    "AbilityTextureName"    "holdout_blade_fury"
+    "AbilityTextureName"    "sniper_assassinate"
     "MaxLevel"              "1"
  
     "AbilityBehavior"    "DOTA_ABILITY_BEHAVIOR_NO_TARGET"
@@ -334,5 +334,133 @@
         }
     }
   }
+
+
+
+  "human_train_mortar"
+  {
+    "BaseClass"             "ability_datadriven"
+    "AbilityTextureName"    "rocket_flare"
+    "MaxLevel"              "1"
+ 
+    "AbilityBehavior"    "DOTA_ABILITY_BEHAVIOR_NO_TARGET"
+ 
+    "AbilityGoldCost"    "3"
+   
+    "Target"
+    {
+      "Center"            "CASTER"
+      "ScriptSelectPoints"
+      {
+          "ScriptFile"    "buildings/rally_point.lua"
+          "Function"      "GetInitialRallyPoint"
+          "Target"    "CASTER"
+          "Count"     "1"
+      }
+    }
+
+    "OnSpellStart"
+    {
+        "SpawnUnit"
+        {
+            "UnitName"    "npc_dota_risk_mortar"
+            "Target"
+            {
+              "Center"            "CASTER"
+              "ScriptSelectPoints"
+              {
+                  "ScriptFile"    "utility.lua"
+                  "Function"      "GetInitialRallyPoint"
+                  "Target"    "CASTER"
+                  "Count"     "1"
+              }
+            }
+            "UnitCount"   "1"
+            "UnitLimit"   "0"
+            "GrantsGold"  "1"
+            "GrantsXP"    "1"
+            "SpawnRadius" "20"
+            "OnSpawn"
+            {
+                "ApplyModifier"
+                {
+                    "ModifierName" "modifier_phased"
+                    "Target"       "TARGET"
+                    "Duration"     "0.03"
+                }
+                "RunScript"
+                {
+                    "ScriptFile"    "utility.lua"
+                    "Function"      "MoveToRallyPoint"
+                }
+            }
+        }
+    }
+  }
+
+
+  "human_train_general"
+  {
+    "BaseClass"             "ability_datadriven"
+    "AbilityTextureName"    "shadowStrike"
+    "MaxLevel"              "1"
+ 
+    "AbilityBehavior"    "DOTA_ABILITY_BEHAVIOR_NO_TARGET"
+ 
+    "AbilityGoldCost"    "10"
+   
+    "Target"
+    {
+      "Center"            "CASTER"
+      "ScriptSelectPoints"
+      {
+          "ScriptFile"    "buildings/rally_point.lua"
+          "Function"      "GetInitialRallyPoint"
+          "Target"    "CASTER"
+          "Count"     "1"
+      }
+    }
+
+    "OnSpellStart"
+    {
+        "SpawnUnit"
+        {
+            "UnitName"    "npc_dota_risk_general"
+            "Target"
+            {
+              "Center"            "CASTER"
+              "ScriptSelectPoints"
+              {
+                  "ScriptFile"    "utility.lua"
+                  "Function"      "GetInitialRallyPoint"
+                  "Target"    "CASTER"
+                  "Count"     "1"
+              }
+            }
+            "UnitCount"   "1"
+            "UnitLimit"   "0"
+            "GrantsGold"  "1"
+            "GrantsXP"    "1"
+            "SpawnRadius" "20"
+            "OnSpawn"
+            {
+                "ApplyModifier"
+                {
+                    "ModifierName" "modifier_phased"
+                    "Target"       "TARGET"
+                    "Duration"     "0.03"
+                }
+                "RunScript"
+                {
+                    "ScriptFile"    "utility.lua"
+                    "Function"      "MoveToRallyPoint"
+                }
+            }
+        }
+    }
+  }
+
+
+
 }
 

@@ -1,0 +1,17 @@
+
+"CustomEvents"
+{
+
+	"player_unit_count_changed"
+	{
+		"teamNumber"	"short"
+		"newUnitCount"	"short"
+	}
+
+	"player_income_changed"
+	{
+		"teamNumber"	"short"
+		"newIncome"		"short"
+	}	
+
+}

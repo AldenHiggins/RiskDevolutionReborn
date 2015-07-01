@@ -40,9 +40,9 @@ function GameMode:OnEntityHurt(keys)
   --DebugPrint("[BAREBONES] Entity Hurt")
   --DebugPrintTable(keys)
 
-  local damagebits = keys.damagebits -- This might always be 0 and therefore useless
-  local entCause = EntIndexToHScript(keys.entindex_attacker)
-  local entVictim = EntIndexToHScript(keys.entindex_killed)
+  -- local damagebits = keys.damagebits -- This might always be 0 and therefore useless
+  -- local entCause = EntIndexToHScript(keys.entindex_attacker)
+  -- local entVictim = EntIndexToHScript(keys.entindex_killed)
 end
 
 -- An item was picked up off the ground
@@ -184,43 +184,6 @@ function GameMode:OnPlayerTakeTowerDamage(keys)
 
   local player = PlayerResource:GetPlayer(keys.PlayerID)
   local damage = keys.damage
-end
-
--- A player picked a hero
-function GameMode:OnPlayerPickHero(keys)
-  DebugPrint('[BAREBONES] OnPlayerPickHero')
-  DebugPrintTable(keys)
-
-  local heroClass = keys.hero
-  local heroEntity = EntIndexToHScript(keys.heroindex)
-  local player = EntIndexToHScript(keys.player)
-  local playerID = heroEntity:GetPlayerID()
-  -- Add this player to the global list so we can get them later etc...
-  self.players[playerID] = player
-  self.playerIncomes[playerID] = 4
-  -- Set this player's starting gold
-  PlayerResource:SetGold(playerID, PLAYER_STARTING_GOLD, true)
-  PlayerResource:SetGold(playerID, 0, false)
-
-  -- Search through bases to set the player's control to the correct one
-  local teamIndex = 1
-  for territory,totalBases in pairs(self.territories) do
-    -- Update all of the bases in the territory
-    for baseNumber = 1, totalBases do
-      local teamNumber = self.teamNumbers[teamIndex]
-      local base = Entities:FindByName(nil, territory .. " " .. baseNumber)
-      
-      if base:GetTeam() == heroEntity:GetTeam() then
-        base:SetOwner(heroEntity)
-        base:SetControllableByPlayer(playerID, true)
-      end
-
-      teamIndex = teamIndex + 1
-      if teamIndex > 10 then
-        teamIndex = 1
-      end
-    end
-  end
 end
 
 -- A player killed another player in a multi-team context

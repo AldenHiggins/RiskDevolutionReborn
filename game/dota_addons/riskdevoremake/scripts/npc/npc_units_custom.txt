@@ -105,8 +105,10 @@
 
         // Abilities
         //----------------------------------------------------------------
-        "AbilityLayout"                         "1"
+        "AbilityLayout"                         "3"
         "Ability1"                              "human_train_rifleman"
+        "Ability2"                              "human_train_mortar"
+        "Ability3"                              "human_train_general"
 
         // Armor
         //----------------------------------------------------------------
@@ -119,7 +121,7 @@
         "AttackDamageMin"           "40"       // Damage range min.
         "AttackDamageMax"           "40"       // Damage range max.
         "AttackDamageType"          "DAMAGE_TYPE_ArmorPhysical"
-        "AttackRate"                "1.0"          // Speed of attack.
+        "AttackRate"                "2.0"          // Speed of attack.
         "AttackAnimationPoint"      "0.0"       // Normalized time in animation cycle to attack.
         "AttackAcquisitionRange"    "300"       // Range within a target can be acquired.
         "AttackRange"               "300"       // Range within a target can be attacked.
@@ -153,7 +155,7 @@
         // Vision
         //----------------------------------------------------------------
         "VisionDaytimeRange"            "900"
-        "VisionNighttimeRange"          "600"
+        "VisionNighttimeRange"          "900"
 
         // Team
         //----------------------------------------------------------------
@@ -181,7 +183,7 @@
         "AttackRate"                "1.6"       // Speed of attack.
         "AttackAnimationPoint"      "0.4"       // Normalized time in animation cycle to attack.
         "AttackAcquisitionRange"    "800"       // Range within a target can be acquired.
-        "AttackRange"               "350"       // Range within a target can be attacked.
+        "AttackRange"               "300"       // Range within a target can be attacked.
         "ProjectileModel"           "particles/units/heroes/hero_sniper/sniper_base_attack.vpcf" // Particle system model for projectile.
         // "particles/units/heroes/hero_sniper/sniper_basic_attack.vpcf"
         "ProjectileSpeed"           "3000"      // Speed of projectile.          
@@ -248,4 +250,179 @@
             }
         }
     }
+
+    "npc_dota_risk_mortar"
+    {
+        "Model" "models/heroes/techies/techies.mdl"
+        "BaseClass" "npc_dota_creature"
+        "ModelScale" "0.28"
+        "SoundSet"                  "Hero_Techies"
+        "Level"                     "25"
+        "UnitLabel"         "MortarTeam"
+
+        "ArmorPhysical"             "1" 
+        "AttackCapabilities"        "DOTA_UNIT_CAP_RANGED_ATTACK"
+        "AttackDamageMin"           "90"        // Damage range min.
+        "AttackDamageMax"           "100"        // Damage range max.
+        "AttackRate"                "2.6"       // Speed of attack.
+        "AttackAnimationPoint"      "0.4"       // Normalized time in animation cycle to attack.
+        "AttackAcquisitionRange"    "800"       // Range within a target can be acquired.
+        "AttackRange"               "700"       // Range within a target can be attacked.
+        "ProjectileModel"           "particles/units/heroes/hero_techies/techies_base_attack.vpcf" // Particle system model for projectile.
+        "ProjectileSpeed"           "900"      // Speed of projectile.          
+
+        // Bounds
+        //----------------------------------------------------------------
+        "RingRadius"                "40"
+        "HealthBarOffset"           "170"
+
+        // Bounty
+        //----------------------------------------------------------------
+        "BountyXP"                  "0"        // Experience earn.
+        "BountyGoldMin"             "0"        // Gold earned min.
+        "BountyGoldMax"             "0"        // Gold earned max.
+
+        // Movement
+        //----------------------------------------------------------------
+        "MovementCapabilities"      "DOTA_UNIT_CAP_MOVE_GROUND"
+        "MovementSpeed"             "270"       // Speed.           
+
+        // Status
+        //----------------------------------------------------------------
+        "StatusHealth"              "75"        // Base health.
+        "StatusHealthRegen"         "0.5"       // Health regeneration rate.
+        "StatusMana"                "0"         // Base mana.
+        "StatusManaRegen"           "0.0"       // Mana regeneration rate.       
+
+        // Vision
+        //----------------------------------------------------------------
+        "VisionDaytimeRange"        "400"       // Range of vision during day light.
+        "VisionNighttimeRange"      "400"       // Range of vision at night time.
+
+        // Team
+        //----------------------------------------------------------------
+        "TeamName"                  "DOTA_TEAM_NEUTRALS"                        // Team name.
+        "CombatClassAttack"         "DOTA_COMBAT_CLASS_ATTACK_PIERCE"
+        "CombatClassDefend"         "DOTA_COMBAT_CLASS_DEFEND_BASIC"
+        "UnitRelationshipClass"     "DOTA_NPC_UNIT_RELATIONSHIP_TYPE_DEFAULT"
+
+        "ParticleFile"              "particles/units/heroes/hero_techies.pcf"
+        "GameSoundsFile"            "scripts/game_sounds_heroes/game_sounds_sniper.txt"
+        "VoiceFile"                 "scripts/voscripts/game_sounds_vo_sniper.txt"
+
+        // Creature Data
+        //----------------------------------------------------------------
+        "Creature"
+        {
+            //Level Up
+            "HPGain"                    "50"
+            "DamageGain"                "2"
+            "ArmorGain"                 "0.25"
+            "MagicResistGain"           "0.1"
+            "MoveSpeedGain"             "1"
+            "BountyGain"                "3"
+            "XPGain"                    "15"
+
+            "AttachWearables"
+            {
+                "Wearable1"     {   "ItemDef"       "490"      } //"Cart"
+                "Wearable2"     {   "ItemDef"       "489"      } //"Slingshot"
+                "Wearable3"     {   "ItemDef"       "491"      } //"Squee costume"
+                "Wearable4"     {   "ItemDef"       "487"      } //"Spoon costume"
+                "Wearable5"     {   "ItemDef"       "492"      } //"Spleen costume"
+            }
+        }
+    }
+
+
+
+    "npc_dota_risk_general"
+    {
+        "Model" "models/heroes/kunkka/kunkka.mdl"
+        "BaseClass" "npc_dota_creature"
+        "ModelScale" "0.51"
+        "SoundSet"                  "Hero_Techies"
+        "Level"                     "25"
+        "UnitLabel"         "General"
+
+        "ArmorPhysical"             "4" 
+        "AttackCapabilities"        "DOTA_UNIT_CAP_MELEE_ATTACK"
+        "AttackDamageMin"           "130"        // Damage range min.
+        "AttackDamageMax"           "130"        // Damage range max.
+        "AttackRate"                ".7"       // Speed of attack.
+        "AttackAnimationPoint"      "0.4"       // Normalized time in animation cycle to attack.
+        "AttackAcquisitionRange"    "500"       // Range within a target can be acquired.
+        "AttackRange"               "50"       // Range within a target can be attacked.
+        "ProjectileModel"           "" // Particle system model for projectile.
+        "ProjectileSpeed"           ""      // Speed of projectile.          
+
+        // Bounds
+        //----------------------------------------------------------------
+        "RingRadius"                "40"
+        "HealthBarOffset"           "170"
+
+        // Bounty
+        //----------------------------------------------------------------
+        "BountyXP"                  "0"        // Experience earn.
+        "BountyGoldMin"             "0"        // Gold earned min.
+        "BountyGoldMax"             "0"        // Gold earned max.
+
+        // Movement
+        //----------------------------------------------------------------
+        "MovementCapabilities"      "DOTA_UNIT_CAP_MOVE_GROUND"
+        "MovementSpeed"             "270"       // Speed.           
+
+        // Status
+        //----------------------------------------------------------------
+        "StatusHealth"              "500"        // Base health.
+        "StatusHealthRegen"         "0.5"       // Health regeneration rate.
+        "StatusMana"                "0"         // Base mana.
+        "StatusManaRegen"           "0.0"       // Mana regeneration rate.       
+
+        // Vision
+        //----------------------------------------------------------------
+        "VisionDaytimeRange"        "900"       // Range of vision during day light.
+        "VisionNighttimeRange"      "900
+        "       // Range of vision at night time.
+
+        // Team
+        //----------------------------------------------------------------
+        "TeamName"                  "DOTA_TEAM_NEUTRALS"                        // Team name.
+        "CombatClassAttack"         "DOTA_COMBAT_CLASS_ATTACK_PIERCE"
+        "CombatClassDefend"         "DOTA_COMBAT_CLASS_DEFEND_BASIC"
+        "UnitRelationshipClass"     "DOTA_NPC_UNIT_RELATIONSHIP_TYPE_DEFAULT"
+
+        "ParticleFile"              "particles/units/heroes/hero_techies.pcf"
+        "GameSoundsFile"            "scripts/game_sounds_heroes/game_sounds_sniper.txt"
+        "VoiceFile"                 "scripts/voscripts/game_sounds_vo_sniper.txt"
+
+        // Creature Data
+        //----------------------------------------------------------------
+        "Creature"
+        {
+            //Level Up
+            "HPGain"                    "50"
+            "DamageGain"                "2"
+            "ArmorGain"                 "0.25"
+            "MagicResistGain"           "0.1"
+            "MoveSpeedGain"             "1"
+            "BountyGain"                "3"
+            "XPGain"                    "15"
+
+            "AttachWearables"
+            {
+                "Wearable1"     {   "ItemDef"       "4765"      } //"Commodore sword"
+                "Wearable2"     {   "ItemDef"       "4766"      } //"Hat"
+                "Wearable3"     {   "ItemDef"       "4767"      } //"Shoulder"
+                "Wearable4"     {   "ItemDef"       "4768"      } //"Gloves costume"
+                "Wearable5"     {   "ItemDef"       "4790"      } //"Chestpiece"
+                "Wearable6"     {   "ItemDef"       "4791"      } //"Boots"
+                "Wearable7"     {   "ItemDef"       "4792"      } //"Sash"
+            }
+        }
+    }
+
+
+
+
 }
