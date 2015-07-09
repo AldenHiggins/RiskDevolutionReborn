@@ -61,6 +61,9 @@ end
 function GameMode:OnPlayerReconnect(keys)
   DebugPrint( '[BAREBONES] OnPlayerReconnect' )
   DebugPrintTable(keys) 
+
+  local player = PlayerResource:GetPlayer(keys.PlayerID)
+  self.players[keys.PlayerID] = player
 end
 
 -- An item was purchased by a player

@@ -78,12 +78,12 @@ end
 function GameMode:OnHeroInGame(hero)
   DebugPrint("[BAREBONES] Hero spawned in game for first time -- " .. hero:GetUnitName())
 
-  -- This line for example will set the starting gold of every hero to 500 unreliable gold
-  hero:SetGold(500, false)
+  -- -- This line for example will set the starting gold of every hero to 500 unreliable gold
+  -- hero:SetGold(500, false)
 
-  -- These lines will create an item and add it to the player, effectively ensuring they start with the item
-  local item = CreateItem("item_example_item", hero, hero)
-  hero:AddItem(item)
+  -- -- These lines will create an item and add it to the player, effectively ensuring they start with the item
+  -- local item = CreateItem("item_example_item", hero, hero)
+  -- hero:AddItem(item)
 
   --[[ --These lines if uncommented will replace the W ability of any hero that loads into the game
     --with the "example_ability" ability

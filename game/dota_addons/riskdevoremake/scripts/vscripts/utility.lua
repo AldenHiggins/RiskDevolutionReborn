@@ -95,8 +95,11 @@ function GameMode:IncomeCheck()
     self.playerIncomes[playerID] = BASE_PLAYER_INCOME
   end
 
+
+  local allBaseNumber = 0
   -- Iterate through all of the territories
   for territory, totalBases in pairs(self.territories) do
+    allBaseNumber = totalBases + allBaseNumber
     local allTheSameTeam = true
     local base = Entities:FindByName(nil, territory .. " " .. 1)
     local playerWhoMayOwnAllBases = base:GetOwner()
@@ -119,10 +122,8 @@ function GameMode:IncomeCheck()
       end
     end
 
-
     -- If this territory is entirely owned by one player, add to their income
     if allTheSameTeam == true then
-      print("Adding to the player's income!!!")
       self.playerIncomes[playerWhoMayOwnAllBases:GetPlayerID()] = self.playerIncomes[playerWhoMayOwnAllBases:GetPlayerID()] + totalBases
       local color = TEAM_COLORS[base:GetTeam()]
       territorySpawn:SetRenderColor(color[1], color[2], color[3])
@@ -141,14 +142,15 @@ function GameMode:IncomeCheck()
     ::continue::
   end
 
-
   for playerID,player in pairs(self.players) do
-    PlayerResource:SetGold(playerID, PlayerResource:GetGold(playerID) + self.playerIncomes[playerID], true)
-    FireGameEvent('player_income_changed', { teamNumber = player:GetTeam(), newIncome = self.playerIncomes[playerID]})
-    -- Check to see if the player has won the game
-    if self.playerIncomes[playerID] > 10 then
-      GameRules:SetSafeToLeave( true )
-      GameRules:SetGameWinner( player:GetTeam() )
+    if player:IsNull() ~= true then
+      PlayerResource:SetGold(playerID, PlayerResource:GetGold(playerID) + self.playerIncomes[playerID], true)
+      FireGameEvent('player_income_changed', { teamNumber = player:GetTeam(), newIncome = self.playerIncomes[playerID]})
+      -- Check to see if the player has won the game
+      if self.playerIncomes[playerID] > INCOME_TO_WIN then
+        GameRules:SetSafeToLeave( true )
+        GameRules:SetGameWinner( player:GetTeam() )
+      end
     end
   end
   return TURN_TIME
@@ -219,7 +221,7 @@ function GameMode:_OnEntityKilled( keys )
 
   local killerEntity = nil
   local closestDistance = 10000000
-  local entitiesNearKilled = Entities:FindAllInSphere(killedUnit:GetOrigin(), 700)
+  local entitiesNearKilled = Entities:FindAllInSphere(killedUnit:GetOrigin(), 1000)
   for _,unit in pairs(entitiesNearKilled) do
     if unit:GetName() == "npc_dota_creature" then
         local circleOrigin = killedUnit:GetOrigin()
@@ -248,4 +250,11 @@ function GameMode:_OnEntityKilled( keys )
 
   -- circle:SetTeam(killerEntity:GetTeam())
   -- circle:SetRenderColor(color[1], color[2], color[3])
+end
+
+function GameMode:OnPlayerSelect( keys )
+  print ("player selected something!")
+  for key, value in pairs(keys) do print(key) end
+
+
 end

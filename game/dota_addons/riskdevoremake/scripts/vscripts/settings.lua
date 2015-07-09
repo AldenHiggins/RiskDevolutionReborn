@@ -14,7 +14,7 @@ GOLD_PER_TICK = 0                     -- How much gold should players get per ti
 GOLD_TICK_TIME = 2000000000                     -- How long should we wait in seconds between gold ticks?
 
 RECOMMENDED_BUILDS_DISABLED = false     -- Should we disable the recommened builds for heroes
-CAMERA_DISTANCE_OVERRIDE = 1134.0       -- How far out should we allow the camera to go?  1134 is the default in Dota
+CAMERA_DISTANCE_OVERRIDE = 2134.0       -- How far out should we allow the camera to go?  1134 is the default in Dota
 
 MINIMAP_ICON_SIZE = 1                   -- What icon size should we use for our heroes?
 MINIMAP_CREEP_ICON_SIZE = 1             -- What icon size should we use for creeps?
@@ -25,7 +25,7 @@ CUSTOM_BUYBACK_COST_ENABLED = true      -- Should we use a custom buyback cost s
 CUSTOM_BUYBACK_COOLDOWN_ENABLED = true  -- Should we use a custom buyback time?
 BUYBACK_ENABLED = false                 -- Should we allow people to buyback when they die?
 
-DISABLE_FOG_OF_WAR_ENTIRELY = false      -- Should we disable fog of war entirely for both teams?
+DISABLE_FOG_OF_WAR_ENTIRELY = true      -- Should we disable fog of war entirely for both teams?
 USE_STANDARD_DOTA_BOT_THINKING = false  -- Should we have bots act like they would in Dota? (This requires 3 lanes, normal items, etc)
 USE_STANDARD_HERO_GOLD_BOUNTY = true    -- Should we give gold for hero kills the same as in Dota, or allow those values to be changed?
 
@@ -50,8 +50,8 @@ for i=1,MAX_LEVEL do
   XP_PER_LEVEL_TABLE[i] = (i-1) * 100
 end
 
-ENABLE_FIRST_BLOOD = true               -- Should we enable first blood for the first kill in this game?
-HIDE_KILL_BANNERS = false               -- Should we hide the kill banners that show when a player is killed?
+ENABLE_FIRST_BLOOD = false               -- Should we enable first blood for the first kill in this game?
+HIDE_KILL_BANNERS = true               -- Should we hide the kill banners that show when a player is killed?
 LOSE_GOLD_ON_DEATH = false               -- Should we have players lose the normal amount of dota gold on death?
 SHOW_ONLY_PLAYER_INVENTORY = false      -- Should we only allow players to see their own inventory even when selecting other units?
 DISABLE_STASH_PURCHASING = false        -- Should we prevent players from being able to buy items into their stash when not at a shop?
@@ -105,7 +105,8 @@ CUSTOM_TEAM_PLAYER_COUNT[DOTA_TEAM_CUSTOM_6] = 1
 CUSTOM_TEAM_PLAYER_COUNT[DOTA_TEAM_CUSTOM_7] = 1
 CUSTOM_TEAM_PLAYER_COUNT[DOTA_TEAM_CUSTOM_8] = 1
 
-PLAYER_STARTING_GOLD = 10
+PLAYER_STARTING_GOLD = 200
 BASE_PLAYER_INCOME = 4
-UNITS_PER_PLAYER = 50
-TURN_TIME = 6
+UNITS_PER_PLAYER = 500
+TURN_TIME = 5
+INCOME_TO_WIN = 110
