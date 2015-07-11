@@ -17,7 +17,7 @@ function OnUpdateSelectedUnit( event )
 	var selectedEntities = Players.GetSelectedEntities( iPlayerID );
 	var mainSelected = Players.GetLocalPlayerPortraitUnit();
 
-	$.Msg( "OnUpdateSelectedUnit, main selected index: "+mainSelected);
+	// $.Msg( "OnUpdateSelectedUnit, main selected index: "+mainSelected);
 	//$.Msg( "Player "+iPlayerID+" Selected Entities ("+(selectedEntities.length)+")" );
 	if (selectedEntities.length > 1 && IsMixedBuildingSelectionGroup(selectedEntities) )
 	{
@@ -63,7 +63,7 @@ function IsMixedBuildingSelectionGroup ( entityList )
 function IsCustomBuilding( entityIndex )
 {
 	var unitName = Entities.GetUnitName( entityIndex )
-	$.Msg("Units name: ",unitName)
+	// $.Msg("Units name: ",unitName)
 	if (unitName == "base")
 	{
 		//$.Msg(entityIndex+" IsCustomBuilding - Ability Index: "+ ability_building)

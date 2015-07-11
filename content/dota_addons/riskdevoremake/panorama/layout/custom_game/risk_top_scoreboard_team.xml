@@ -1,0 +1,21 @@
+<root>
+    <styles>
+		<include src="file://{resources}/styles/custom_game/risk_top_scoreboard.css" />
+    </styles>
+	<script>
+
+		$.Msg( "Risk scoreboard is running!!!!!!" );
+
+	</script>
+	<Panel class="RiskScoreBoard">
+		<Panel class="VictoryPanel">
+			<Label id="Goal" text="#Goal" />
+			<Label id="VictoryPoints" text="999" />
+			<Label id="Timer" text="--:--" />
+		</Panel>
+
+		
+		<Image hittest="false" id="onlyImage" class="TestImage" src="file://{images}/custom_game/loading_screen/gamemode.png" />
+	</Panel>
+</root>
+

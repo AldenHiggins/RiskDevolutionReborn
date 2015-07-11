@@ -52,6 +52,13 @@ function GameMode:CheckUnitCount(playerID, player, target)
     -- Fire event to the UI that a player count has changed
     FireGameEvent('player_unit_count_changed', { teamNumber = player:GetTeam(), newUnitCount = self.unitCount[playerID]})
 
+    local unitCountEventData =
+    {
+      playerID = playerID,
+      newUnitCount = self.unitCount[playerID],
+    }
+    CustomGameEventManager:Send_ServerToAllClients( "player_unit_count_changed", unitCountEventData )
+
     return true
 end
 
@@ -124,7 +131,7 @@ function GameMode:IncomeCheck()
 
     -- If this territory is entirely owned by one player, add to their income
     if allTheSameTeam == true then
-      self.playerIncomes[playerWhoMayOwnAllBases:GetPlayerID()] = self.playerIncomes[playerWhoMayOwnAllBases:GetPlayerID()] + totalBases
+      self.playerIncomes[playerWhoMayOwnAllBases:GetPlayerID()] = self.playerIncomes[playerWhoMayOwnAllBases:GetPlayerID()] + (totalBases - 1)
       local color = TEAM_COLORS[base:GetTeam()]
       territorySpawn:SetRenderColor(color[1], color[2], color[3])
       territorySpawn:SetTeam(base:GetTeam())
@@ -146,6 +153,14 @@ function GameMode:IncomeCheck()
     if player:IsNull() ~= true then
       PlayerResource:SetGold(playerID, PlayerResource:GetGold(playerID) + self.playerIncomes[playerID], true)
       FireGameEvent('player_income_changed', { teamNumber = player:GetTeam(), newIncome = self.playerIncomes[playerID]})
+
+      local incomeChangedEventData =
+      {
+        playerID = playerID,
+        newIncome = self.playerIncomes[playerID],
+      }
+      CustomGameEventManager:Send_ServerToAllClients( "player_income_changed", incomeChangedEventData )
+
       -- Check to see if the player has won the game
       if self.playerIncomes[playerID] > INCOME_TO_WIN then
         GameRules:SetSafeToLeave( true )
@@ -203,6 +218,13 @@ function GameMode:_OnEntityKilled( keys )
   if killedUnit:GetClassname() == "npc_dota_creature" then
     self.unitCount[killedUnit:GetOwner():GetPlayerID()] = self.unitCount[killedUnit:GetOwner():GetPlayerID()] - 1
     FireGameEvent('player_unit_count_changed', { teamNumber = killedUnit:GetOwner():GetTeam(), newUnitCount = self.unitCount[killedUnit:GetOwner():GetPlayerID()]})
+
+    local unitCountEventData =
+    {
+      playerID = killedUnit:GetOwner():GetPlayerID(),
+      newUnitCount = self.unitCount[killedUnit:GetOwner():GetPlayerID()],
+    }
+    CustomGameEventManager:Send_ServerToAllClients( "player_unit_count_changed", unitCountEventData )
   end
 
   if killedUnit:GetClassname() ~= "npc_dota_building" then
@@ -255,6 +277,9 @@ end
 function GameMode:OnPlayerSelect( keys )
   print ("player selected something!")
   for key, value in pairs(keys) do print(key) end
+end
 
-
+function GameMode:TimerFunction()
+  CustomGameEventManager:Send_ServerToAllClients( "timer", nil )
+  return 1
 end

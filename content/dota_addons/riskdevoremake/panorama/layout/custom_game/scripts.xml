@@ -1,11 +1,22 @@
 <root>
+	<styles>
+		<include src="file://{resources}/styles/custom_game/risk_top_scoreboard.css" />
+    </styles>
 	<scripts>
 		<include src="file://{resources}/scripts/unit_selection.js" />
+		<include src="file://{resources}/scripts/risk_top_scoreboard.js" />
 	</scripts>
 	<script>
-		$.Msg( "Compiled Panorama Scripts" );
+		$.Msg( "Compiled Panorama Scripts!!!" );
 	</script>
-	<Panel>
-		<!-- (Panel hierarchy goes here.) -->
+	<Panel class="RiskScoreBoard">
+		<Panel class="VictoryPanel" id="VicPanel">
+			<Label id="Title" text="Risk Europe" />
+			<Label id="Goal" text="Income to win:" />
+			<Label id="VictoryPoints" text="100" />
+			<Label id="Timer" text="--:--" />
+		</Panel>
+
+		<Panel class="PlayersPanel" id="PlayerContainer" />
 	</Panel>
 </root>

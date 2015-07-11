@@ -101,6 +101,7 @@ end
 function GameMode:OnGameInProgress()
   DebugPrint("[BAREBONES] The game has officially begun")
   GameRules:GetGameModeEntity():SetThink( "IncomeCheck", self)
+  GameRules:GetGameModeEntity():SetThink( "TimerFunction", self)
   Timers:CreateTimer(0, -- Start this timer 30 game-time seconds later
     function()
       DebugPrint("This function is called 30 seconds after the game begins, and every 30 seconds thereafter")
@@ -187,6 +188,8 @@ function GameMode:InitGameMode()
   mode:SetHUDVisible(1, false)
   -- Disables shop
   mode:SetHUDVisible(6, false)
+
+
 
   print ("registering command")
   Convars:RegisterCommand( "ExampleCommand", function(name, p)

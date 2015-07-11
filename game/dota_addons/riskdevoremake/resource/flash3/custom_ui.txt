@@ -7,7 +7,7 @@
 
 	"1"
 	{
-		"File"		"CustomUI"
+		"File"		""
 		"Depth"		"1"
 	}
 }
