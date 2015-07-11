@@ -15,14 +15,10 @@ function MoveToRallyPoint( event )
     -- Recolor the unit you spawned
     local color = TEAM_COLORS[caster:GetTeam()]
 
-    target:SetRenderColor(color[1], color[2], color[3])
+    RecolorUnit(target, color)
+    -- target:SetRenderColor(color[1], color[2], color[3])
+    -- target:GetChildren()[3]:SetRenderColor(color[1], color[2], color[3])
 
-    print ("Created: .. " .. target:GetUnitName())
-    -- if target:GetUnitName() == "npc_dota_risk_general" then
-    --     return
-    -- end
-
-    target:GetChildren()[3]:SetRenderColor(color[1], color[2], color[3])
 end
 
 function GetInitialRallyPoint( event )
@@ -50,20 +46,17 @@ function GameMode:CheckUnitCount(playerID, player, target)
     self.unitCount[playerID] = self.unitCount[playerID] + 1
 
     -- Fire event to the UI that a player count has changed
-    FireGameEvent('player_unit_count_changed', { teamNumber = player:GetTeam(), newUnitCount = self.unitCount[playerID]})
-
     local unitCountEventData =
     {
       playerID = playerID,
       newUnitCount = self.unitCount[playerID],
     }
     CustomGameEventManager:Send_ServerToAllClients( "player_unit_count_changed", unitCountEventData )
-
     return true
 end
 
 function GameMode:AllocateBases()
-  print("Allocating bases")
+  print("====Allocating bases====")
   local teamIndex = 1
   -- Iterate through all of the territories
   for territory,totalBases in pairs(self.territories) do
@@ -79,14 +72,6 @@ function GameMode:AllocateBases()
 
       local circle = Entities:FindByName(nil, territory .. " " .. baseNumber .. " Spawn")
       circle:Destroy()
-      -- circle:SetTeam(teamNumber)
-      -- circle:SetRenderColor(color[1], color[2], color[3])
-      -- circle:SetOrigin(base:GetOrigin())
-
-      -- local newUnit = CreateUnitByName("npc_dota_risk_rifleman", circle:GetOrigin(), true, nil, nil, teamNumber)
-      -- newUnit:SetRenderColor(color[1], color[2], color[3])
-      -- newUnit:GetChildren()[3]:SetRenderColor(color[1], color[2], color[3])
-      -- newUnit:SetUnitName(territory .. " " .. baseNumber)
 
       teamIndex = teamIndex + 1
       if teamIndex > 10 then
@@ -94,6 +79,7 @@ function GameMode:AllocateBases()
       end
     end
   end
+  print("====Finished allocating bases====")
 end
 
 function GameMode:IncomeCheck()
@@ -101,7 +87,6 @@ function GameMode:IncomeCheck()
   for playerID,player in pairs(self.players) do
     self.playerIncomes[playerID] = BASE_PLAYER_INCOME
   end
-
 
   local allBaseNumber = 0
   -- Iterate through all of the territories
@@ -116,11 +101,10 @@ function GameMode:IncomeCheck()
     if playerWhoMayOwnAllBases == nil then
       goto continue
     end
-    -- print ("First base player: " .. playerWhoMayOwnAllBases)
     -- Update all of the bases in the territory
     for baseNumber = 2, totalBases do
       local nextBase = Entities:FindByName(nil, territory .. " " .. baseNumber)
-      -- print ("This next player: " .. base:GetOwner())
+      -- If the territory is contested make the name white
       if nextBase:GetOwner() ~= playerWhoMayOwnAllBases then
         allTheSameTeam = false
         territorySpawn:SetRenderColor(255, 255, 255)
@@ -137,13 +121,6 @@ function GameMode:IncomeCheck()
       territorySpawn:SetTeam(base:GetTeam())
       territoryLabel:SetRenderColor(color[1], color[2], color[3])
       territoryLabel:SetTeam(base:GetTeam())
-
-      -- Generate free units every turn
-      -- local newUnit = CreateUnitByName("npc_dota_risk_rifleman", territorySpawn:GetOrigin(), true, nil, nil, base:GetTeam())
-      -- newUnit:SetRenderColor(color[1], color[2], color[3])
-      -- newUnit:GetChildren()[3]:SetRenderColor(color[1], color[2], color[3])
-      -- newUnit:SetOwner(base:GetOwner())
-      -- newUnit:SetControllableByPlayer(base:GetOwner():GetPlayerID(), true)
     end
 
     ::continue::
@@ -151,9 +128,10 @@ function GameMode:IncomeCheck()
 
   for playerID,player in pairs(self.players) do
     if player:IsNull() ~= true then
+      -- Award gold to the player
       PlayerResource:SetGold(playerID, PlayerResource:GetGold(playerID) + self.playerIncomes[playerID], true)
-      FireGameEvent('player_income_changed', { teamNumber = player:GetTeam(), newIncome = self.playerIncomes[playerID]})
 
+      -- Let the UI know about the change in income
       local incomeChangedEventData =
       {
         playerID = playerID,
@@ -217,8 +195,8 @@ function GameMode:_OnEntityKilled( keys )
   
   if killedUnit:GetClassname() == "npc_dota_creature" then
     self.unitCount[killedUnit:GetOwner():GetPlayerID()] = self.unitCount[killedUnit:GetOwner():GetPlayerID()] - 1
-    FireGameEvent('player_unit_count_changed', { teamNumber = killedUnit:GetOwner():GetTeam(), newUnitCount = self.unitCount[killedUnit:GetOwner():GetPlayerID()]})
 
+    -- Let the UI know that the unit was killed
     local unitCountEventData =
     {
       playerID = killedUnit:GetOwner():GetPlayerID(),
@@ -231,21 +209,13 @@ function GameMode:_OnEntityKilled( keys )
     return
   end
 
-  print (killedUnit:GetName() .. " was killed")
-  
-  -- local circle = Entities:FindByName(nil, killedUnit:GetName() .. " Spawn")
-
-  -- if circle == nil then
-  --   return
-  -- end
-
   killedUnit:RespawnUnit()
+  -- Restore the base's health after a timer goes off to prevent your own units from damaging the base further
   GameRules:GetGameModeEntity():SetThink(function ()
    killedUnit:SetHealth(killedUnit:GetMaxHealth())
   end, "", 2)
 
-  -- DOTA_UNIT_TARGET_FLAG_INVULNERABLE  64
-
+  -- Find the unit closest to the base in order to determine who now owns it
   local killerEntity = nil
   local closestDistance = 10000000
   local entitiesNearKilled = Entities:FindAllInSphere(killedUnit:GetOrigin(), 1000)
@@ -261,7 +231,6 @@ function GameMode:_OnEntityKilled( keys )
             killerEntity = unit
           end
         end
-
     end
   end
 
@@ -269,14 +238,12 @@ function GameMode:_OnEntityKilled( keys )
     return
   end  
 
+  -- Recolor the base and change its allegiance
   color = TEAM_COLORS[killerEntity:GetTeam()]
   killedUnit:SetTeam(killerEntity:GetTeam())
   killedUnit:SetRenderColor(color[1], color[2], color[3])
   killedUnit:SetOwner(killerEntity:GetOwner())
   killedUnit:SetControllableByPlayer(killerEntity:GetOwner():GetPlayerID(), true)
-
-  -- circle:SetTeam(killerEntity:GetTeam())
-  -- circle:SetRenderColor(color[1], color[2], color[3])
 end
 
 function GameMode:OnPlayerSelect( keys )
@@ -287,4 +254,48 @@ end
 function GameMode:TimerFunction()
   CustomGameEventManager:Send_ServerToAllClients( "timer", nil )
   return 1
+end
+
+function HealAutocast( event )
+  local caster = event.caster
+  local target = event.target -- victim of the attack
+  local ability = event.ability
+
+  -- Get if the ability is on autocast mode and cast the ability on the attacked target if it doesn't have the modifier
+  if ability:GetAutoCastState() then
+    caster:CastAbilityOnTarget(target, ability, caster:GetPlayerOwnerID())
+  end 
+end
+
+function RecolorUnit(unit, color)
+  print ("Recoloring: " .. unit:GetUnitName())
+  if unit:GetUnitName() == "npc_dota_risk_rifleman" then
+    unit:SetRenderColor(color[1], color[2], color[3])
+    unit:GetChildren()[1]:SetRenderColor(color[1], color[2], color[3])
+    unit:GetChildren()[3]:SetRenderColor(color[1], color[2], color[3])
+  elseif unit:GetUnitName() == "npc_dota_risk_mortar" then
+    unit:SetRenderColor(color[1], color[2], color[3])
+    unit:GetChildren()[3]:SetRenderColor(color[1], color[2], color[3])
+    unit:GetChildren()[4]:SetRenderColor(color[1], color[2], color[3])
+    unit:GetChildren()[5]:SetRenderColor(color[1], color[2], color[3])
+  elseif unit:GetUnitName() == "npc_dota_risk_medic" then
+    unit:GetChildren()[4]:SetRenderColor(color[1], color[2], color[3])
+    -- Who knows
+    unit:GetChildren()[1]:SetRenderColor(color[1], color[2], color[3])
+    -- Bracers cloak and weapon
+    unit:GetChildren()[2]:SetRenderColor(color[1], color[2], color[3])
+    unit:GetChildren()[3]:SetRenderColor(color[1], color[2], color[3])
+    unit:GetChildren()[5]:SetRenderColor(color[1], color[2], color[3])
+  elseif unit:GetUnitName() == "npc_dota_risk_general" then
+    unit:GetChildren()[7]:SetRenderColor(color[1], color[2], color[3])
+    -- Shoulderpads gloves
+    unit:GetChildren()[4]:SetRenderColor(color[1], color[2], color[3])
+    unit:GetChildren()[5]:SetRenderColor(color[1], color[2], color[3])
+    unit:GetChildren()[6]:SetRenderColor(color[1], color[2], color[3])
+    -- Hat and sword
+    unit:GetChildren()[1]:SetRenderColor(color[1], color[2], color[3])
+    unit:GetChildren()[2]:SetRenderColor(color[1], color[2], color[3])
+    unit:GetChildren()[3]:SetRenderColor(color[1], color[2], color[3])
+  end
+
 end

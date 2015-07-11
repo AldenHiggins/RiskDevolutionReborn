@@ -18,7 +18,8 @@
         "AbilityLayout"                         "3"
         "Ability1"                              "human_train_rifleman"
         "Ability2"                              "human_train_mortar"
-        "Ability3"                              "human_train_general"
+        "Ability3"                              "human_train_medic"
+        "Ability4"                              "human_train_general"
 
         // Armor
         //----------------------------------------------------------------
@@ -263,6 +264,107 @@
         }
     }
 
+    "npc_dota_risk_medic"
+    {
+        "Model" "models/heroes/crystal_maiden/crystal_maiden.mdl"
+        "BaseClass" "npc_dota_creature"
+        "ModelScale" "0.44"
+        "SoundSet"                     "hero_Crystal"                                  
+        "GameSoundsFile"               "soundevents/game_sounds_heroes/game_sounds_crystalmaiden.vsndevts"
+        "Level"                     "25"
+        "UnitLabel"         "Medic"
+
+        "ArmorPhysical"             "1" 
+        "AttackCapabilities"        "DOTA_UNIT_CAP_RANGED_ATTACK"
+        "AttackDamageMin"           "10"        // Damage range min.
+        "AttackDamageMax"           "20"        // Damage range max.
+        "AttackRate"                "1.6"       // Speed of attack.
+        "AttackAnimationPoint"      "0.4"       // Normalized time in animation cycle to attack.
+        "AttackAcquisitionRange"    "300"       // Range within a target can be acquired.
+        "AttackRange"               "300"       // Range within a target can be attacked.
+        "ProjectileModel"           "particles/units/heroes/hero_crystalmaiden/maiden_base_attack.vpcf" // Particle system model for projectile.
+        "ProjectileSpeed"           "900"      // Speed of projectile.     
+        "PathfindingSearchDepthScale"     "0.1"
+        "AutoAttacksByDefault"         "1" 
+        "HasAggressiveStance"         "1"
+
+        "AbilityLayout"               "4"
+        "Ability2"              "medic_heal"
+
+        // Bounds
+        //----------------------------------------------------------------
+        "RingRadius"                "40"
+        "HealthBarOffset"           "170"
+
+        // Bounty
+        //----------------------------------------------------------------
+        "BountyXP"                  "0"        // Experience earn.
+        "BountyGoldMin"             "0"        // Gold earned min.
+        "BountyGoldMax"             "0"        // Gold earned max.
+
+        // Movement
+        //----------------------------------------------------------------
+        "MovementCapabilities"      "DOTA_UNIT_CAP_MOVE_GROUND"
+        "MovementSpeed"             "270"       // Speed.           
+
+        // Status
+        //----------------------------------------------------------------
+        "StatusHealth"              "120"        // Base health.
+        "StatusHealthRegen"         "0.5"       // Health regeneration rate.
+        "StatusMana"                "100"         // Base mana.
+        "StatusManaRegen"           "1.0"       // Mana regeneration rate.       
+
+        // Vision
+        //----------------------------------------------------------------
+        "VisionDaytimeRange"        "400"       // Range of vision during day light.
+        "VisionNighttimeRange"      "400"       // Range of vision at night time.
+
+        // Team
+        //----------------------------------------------------------------
+        "TeamName"                  "DOTA_TEAM_NEUTRALS"                        // Team name.
+        "CombatClassAttack"         "DOTA_COMBAT_CLASS_ATTACK_BASIC"
+        "CombatClassDefend"         "DOTA_COMBAT_CLASS_DEFEND_STRONG"
+        "UnitRelationshipClass"     "DOTA_NPC_UNIT_RELATIONSHIP_TYPE_DEFAULT"
+
+        "ParticleFile"              "particles/units/heroes/hero_sniper.pcf"
+        "VoiceFile"                 "scripts/voscripts/game_sounds_vo_sniper.txt"
+
+        // Creature Data
+        //----------------------------------------------------------------
+        "Creature"
+        {
+            //Level Up
+            "HPGain"                    "50"
+            "DamageGain"                "2"
+            "ArmorGain"                 "0.25"
+            "MagicResistGain"           "0.1"
+            "MoveSpeedGain"             "1"
+            "BountyGain"                "3"
+            "XPGain"                    "15"
+
+            "DefaultState"       "Invade"
+            "States"
+            {
+                "Invade"
+                {
+                    "Name"          "Invade"
+                    "Aggression"    "100.0"
+                    "Avoidance"     "01.0"
+                    "Support"       "0.0"
+                    "RoamDistance"  "1000.0"
+                }
+            }
+
+            "AttachWearables"
+            {
+                "Wearable1"     {   "ItemDef"       "5212"      } //"BRACERS"
+                "Wearable2"     {   "ItemDef"       "5213"      } //"CLOAK"
+                "Wearable3"     {   "ItemDef"       "5216"      } //"SHOULDERS"
+                "Wearable4"     {   "ItemDef"       "5215"      } //"STAFF"
+                "Wearable5"     {   "ItemDef"       "5214"      } //"HOOD"
+            }
+        }
+    }
 
 
     "npc_dota_risk_general"
@@ -324,7 +426,7 @@
         // Team
         //----------------------------------------------------------------
         "TeamName"                  "DOTA_TEAM_NEUTRALS"                        // Team name.
-        "CombatClassAttack"         "DOTA_COMBAT_CLASS_ATTACK_BASIC"
+        "CombatClassAttack"         "DOTA_COMBAT_CLASS_ATTACK_PIERCE"
         "CombatClassDefend"         "DOTA_COMBAT_CLASS_DEFEND_STRONG"
         "UnitRelationshipClass"     "DOTA_NPC_UNIT_RELATIONSHIP_TYPE_DEFAULT"
 

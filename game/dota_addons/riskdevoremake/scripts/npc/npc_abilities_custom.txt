@@ -273,6 +273,86 @@
     "AbilityTextureName"            "rubick_empty1"
   }
 
+  //-----------------------------------------------------------------------------------------------
+  // Unit abilities
+  //-----------------------------------------------------------------------------------------------
+  "medic_heal"
+  {
+
+      // General  
+      // ----------------------------------------------------------------------------------------
+      "BaseClass"              "ability_datadriven"
+      "AbilityBehavior"       "DOTA_ABILITY_BEHAVIOR_UNIT_TARGET | DOTA_ABILITY_BEHAVIOR_DONT_RESUME_ATTACK | DOTA_ABILITY_BEHAVIOR_AUTOCAST"
+      "AbilityTextureName"     "forest_troll_priest_heal"
+      "AbilityUnitTargetTeam"  "DOTA_UNIT_TARGET_TEAM_FRIENDLY"
+      "AbilityUnitTargetType"  "DOTA_UNIT_TARGET_HERO | DOTA_UNIT_TARGET_BASIC"
+      "AbilityUnitTargetFlags" "DOTA_UNIT_TARGET_FLAG_MAGIC_IMMUNE_ENEMIES"
+      "AbilityUnitDamageType"  "DAMAGE_TYPE_MAGICAL"
+
+      "AbilityType"            "DOTA_ABILITY_TYPE_BASIC"
+      "MaxLevel"               "1"
+      "RequiredLevel"          "-4"
+      "LevelsBetweenUpgrades"  "1"
+
+      "AbilityCastPoint"       "1.0"
+      "AbilityCastAnimation"   "ACT_DOTA_CAST_ABILITY_2"
+      "AnimationPlaybackRate"  "1"
+      "AnimationIgnoresModelScale" "1"
+
+      // Stats
+      //----------------------------------------------------------------------------------------
+      "AbilityDamage"           "0"
+      "AbilityManaCost"         "10"
+      "AbilityCooldown"         "0.5"
+      "AbilityCastRange"        "600"
+      "AbilityCastRangeBuffer"  "250"
+      "AbilityChannelTime"      "0.0"
+      "AbilityChannelledManaCostPerSecond" "0"
+      "AbilityDuration"         "0"
+      "AoERadius"               "0"
+
+
+
+      //-------------------------------------------------------------------------------------
+      "OnSpellStart"
+      {
+          "Heal"
+          {
+              "Target"  "TARGET"
+              "HealAmount" "50"
+           }
+      }
+
+      //-------------------------------------------------------------------------------------
+      "Modifiers"
+      {
+          "modifier_heal_autocast_aura"
+          {
+            "Passive" "1"
+            "IsHidden"  "1"
+
+            "Aura"        "modifier_heal_autocast_attacked"
+            "Aura_Radius"     "500"
+            "Aura_Teams"    "DOTA_UNIT_TARGET_TEAM_FRIENDLY"
+            "Aura_Types"    "DOTA_UNIT_TARGET_BASIC | DOTA_UNIT_TARGET_HERO"
+          }
+
+          "modifier_heal_autocast_attacked"
+          {
+            "IsHidden"  "1"
+            "OnAttacked"
+            {
+              "RunScript"
+              {
+                  "ScriptFile"    "utlity.lua"
+                  "Function"      "HealAutocast"
+              }
+            }
+          }
+      }
+
+  }
+
   "general_warcry"
   {
       // General  
@@ -291,7 +371,7 @@
       "LevelsBetweenUpgrades"  "1"
 
       "AbilityCastPoint"       "0.0"
-      "AbilityCastAnimation"   "ACT_DOTA_ATTACK"
+      "AbilityCastAnimation"   "ACT_DOTA_DISABLED"
       "AnimationPlaybackRate"  "1"
       "AnimationIgnoresModelScale" "1"
 
@@ -341,6 +421,9 @@
       }
   }
 
+  //-----------------------------------------------------------------------------------------------
+  // Train unit abilities
+  //-----------------------------------------------------------------------------------------------
 
   "human_train_rifleman"
   {
@@ -494,6 +577,68 @@
         "SpawnUnit"
         {
             "UnitName"    "npc_dota_risk_general"
+            "Target"
+            {
+              "Center"            "CASTER"
+              "ScriptSelectPoints"
+              {
+                  "ScriptFile"    "utility.lua"
+                  "Function"      "GetInitialRallyPoint"
+                  "Target"    "CASTER"
+                  "Count"     "1"
+              }
+            }
+            "UnitCount"   "1"
+            "UnitLimit"   "0"
+            "GrantsGold"  "1"
+            "GrantsXP"    "1"
+            "SpawnRadius" "20"
+            "OnSpawn"
+            {
+                "ApplyModifier"
+                {
+                    "ModifierName" "modifier_phased"
+                    "Target"       "TARGET"
+                    "Duration"     "0.03"
+                }
+                "RunScript"
+                {
+                    "ScriptFile"    "utility.lua"
+                    "Function"      "MoveToRallyPoint"
+                }
+            }
+        }
+    }
+  }
+
+
+  "human_train_medic"
+  {
+    "BaseClass"             "ability_datadriven"
+    "AbilityTextureName"    "crystal_maiden_brilliance_aura"
+    "MaxLevel"              "1"
+ 
+    "AbilityBehavior"    "DOTA_ABILITY_BEHAVIOR_NO_TARGET"
+ 
+    "AbilityGoldCost"    "5"
+   
+    "Target"
+    {
+      "Center"            "CASTER"
+      "ScriptSelectPoints"
+      {
+          "ScriptFile"    "buildings/rally_point.lua"
+          "Function"      "GetInitialRallyPoint"
+          "Target"    "CASTER"
+          "Count"     "1"
+      }
+    }
+
+    "OnSpellStart"
+    {
+        "SpawnUnit"
+        {
+            "UnitName"    "npc_dota_risk_medic"
             "Target"
             {
               "Center"            "CASTER"

@@ -9,7 +9,7 @@ function OnUpdateSelectedUnit( event )
 	{
 		skip = false;
 		selectionOverriden = false;
-		//$.Msg("skip")
+		$.Msg("skip")
 		return
 	}
 
@@ -18,26 +18,41 @@ function OnUpdateSelectedUnit( event )
 	var mainSelected = Players.GetLocalPlayerPortraitUnit();
 
 	// $.Msg( "OnUpdateSelectedUnit, main selected index: "+mainSelected);
-	//$.Msg( "Player "+iPlayerID+" Selected Entities ("+(selectedEntities.length)+")" );
+	$.Msg( "Player "+iPlayerID+" Selected Entities ("+(selectedEntities.length)+")" );
 	if (selectedEntities.length > 1 && IsMixedBuildingSelectionGroup(selectedEntities) )
 	{
 		$.Msg( "IsMixedBuildingSelectionGroup, proceeding to deselect the buildings and get only the units ")
+		$.Msg( "Number of selected entities: " , selectedEntities.length)
 		for (var i = 0; i < selectedEntities.length; i++) 
 		{
+			$.Msg( "Iterating unit: ", Entities.GetUnitName(selectedEntities[i]));
 			skip = true; // Makes it skip an update
 			if (!IsCustomBuilding(selectedEntities[i]) && !selectionOverriden)
 			{
-				selectionOverriden = true
-				GameUI.SelectUnit(selectedEntities[i], false);
+				$.Msg( "Starting");
+				selectionOverriden = true;
+				GameUI.SelectUnit(selectedEntities[i], true);
 				//$.Msg( "New selection group");
 			}
-			else if (!IsCustomBuilding(selectedEntities[i]) )
+			else if (!IsCustomBuilding(selectedEntities[i]))
 			{
-				GameUI.SelectUnit(selectedEntities[i], true); //
-				//$.Msg( selectedEntities[i]+" added to the selection group");
+				$.Msg( "Selecting ")
+				GameUI.SelectUnit(selectedEntities[i], true);
+			}
+			else if (selectionOverriden)
+			{
+				$.Msg( "Base found")
+				// GameUI.SelectUnit(selectedEntities[i], true);
+				// skip = false;
+				// selectionOverriden = false;
+				// // OnUpdateSelectedUnit(event);
+				// return
 			}
 		}	
 	}
+
+	// selectionOverriden = false;
+
 }
 
 // Returns whether the selection group contains both buildings and non-building units
@@ -89,7 +104,7 @@ function OnUpdateQueryUnit( event )
 }
 
 (function () {
-	GameEvents.Subscribe( "npc_spawned", OnNPCSpawned );
+	// GameEvents.Subscribe( "npc_spawned", OnNPCSpawned );
 	GameEvents.Subscribe( "dota_player_update_selected_unit", OnUpdateSelectedUnit );
-	GameEvents.Subscribe( "dota_player_update_query_unit", OnUpdateQueryUnit );
+	// GameEvents.Subscribe( "dota_player_update_query_unit", OnUpdateQueryUnit );
 })();
