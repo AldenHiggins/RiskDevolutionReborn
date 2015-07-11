@@ -240,6 +240,11 @@ function GameMode:_OnEntityKilled( keys )
   -- end
 
   killedUnit:RespawnUnit()
+  GameRules:GetGameModeEntity():SetThink(function ()
+   killedUnit:SetHealth(killedUnit:GetMaxHealth())
+  end, "", 2)
+
+  -- DOTA_UNIT_TARGET_FLAG_INVULNERABLE  64
 
   local killerEntity = nil
   local closestDistance = 10000000

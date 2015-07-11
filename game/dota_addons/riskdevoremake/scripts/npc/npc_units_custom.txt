@@ -7,7 +7,7 @@
     {
         // General
         //----------------------------------------------------------------
-        "BaseClass"                                     "npc_dota_building"
+        "BaseClass"                                     "npc_dota_creature"
         "Model"                                         "models/props_structures/tower_good.mdl"
         "ModelScale"                            ".5"
         "Level"                                         "1"
@@ -82,7 +82,8 @@
         "Model" "models/heroes/sniper/sniper.mdl"
         "BaseClass" "npc_dota_creature"
         "ModelScale" "0.44"
-        "SoundSet"                  "Hero_Sniper"
+        "SoundSet"                     "Hero_Sniper"
+        "GameSoundsFile"               "soundevents/game_sounds_heroes/game_sounds_sniper.vsndevts"
         "Level"                     "25"
         "UnitLabel"         "Rifleman"
 
@@ -98,6 +99,8 @@
         // "particles/units/heroes/hero_sniper/sniper_basic_attack.vpcf"
         "ProjectileSpeed"           "3000"      // Speed of projectile.     
         "PathfindingSearchDepthScale"     "0.1"
+        "AutoAttacksByDefault"         "1" 
+        "HasAggressiveStance"         "1"
 
         // Bounds
         //----------------------------------------------------------------
@@ -130,12 +133,11 @@
         // Team
         //----------------------------------------------------------------
         "TeamName"                  "DOTA_TEAM_NEUTRALS"                        // Team name.
-        "CombatClassAttack"         "DOTA_COMBAT_CLASS_ATTACK_PIERCE"
-        "CombatClassDefend"         "DOTA_COMBAT_CLASS_DEFEND_BASIC"
+        "CombatClassAttack"         "DOTA_COMBAT_CLASS_ATTACK_BASIC"
+        "CombatClassDefend"         "DOTA_COMBAT_CLASS_DEFEND_STRONG"
         "UnitRelationshipClass"     "DOTA_NPC_UNIT_RELATIONSHIP_TYPE_DEFAULT"
 
         "ParticleFile"              "particles/units/heroes/hero_sniper.pcf"
-        "GameSoundsFile"            "scripts/game_sounds_heroes/game_sounds_sniper.txt"
         "VoiceFile"                 "scripts/voscripts/game_sounds_vo_sniper.txt"
 
         // Creature Data
@@ -150,6 +152,19 @@
             "MoveSpeedGain"             "1"
             "BountyGain"                "3"
             "XPGain"                    "15"
+
+            "DefaultState"       "Invade"
+            "States"
+            {
+                "Invade"
+                {
+                    "Name"          "Invade"
+                    "Aggression"    "100.0"
+                    "Avoidance"     "01.0"
+                    "Support"       "0.0"
+                    "RoamDistance"  "1000.0"
+                }
+            }
 
             "AttachWearables"
             {
@@ -167,21 +182,24 @@
         "Model" "models/heroes/techies/techies.mdl"
         "BaseClass" "npc_dota_creature"
         "ModelScale" "0.28"
-        "SoundSet"                  "Hero_Techies"
+        "SoundSet"                     "Hero_Techies"
+        "GameSoundsFile"               "soundevents/game_sounds_heroes/game_sounds_techies.vsndevts"
         "Level"                     "25"
         "UnitLabel"         "MortarTeam"
 
         "ArmorPhysical"             "1" 
         "AttackCapabilities"        "DOTA_UNIT_CAP_RANGED_ATTACK"
-        "AttackDamageMin"           "90"        // Damage range min.
-        "AttackDamageMax"           "100"        // Damage range max.
+        "AttackDamageMin"           "50"        // Damage range min.
+        "AttackDamageMax"           "55"        // Damage range max.
         "AttackRate"                "2.6"       // Speed of attack.
         "AttackAnimationPoint"      "0.4"       // Normalized time in animation cycle to attack.
         "AttackAcquisitionRange"    "700"       // Range within a target can be acquired.
         "AttackRange"               "600"       // Range within a target can be attacked.
         "ProjectileModel"           "particles/units/heroes/hero_techies/techies_base_attack.vpcf" // Particle system model for projectile.
         "ProjectileSpeed"           "900"      // Speed of projectile.    
-        "PathfindingSearchDepthScale"     "0.1"      
+        "PathfindingSearchDepthScale"     "0.1"    
+        "AutoAttacksByDefault"         "1"  
+        "HasAggressiveStance"         "1"
 
         // Bounds
         //----------------------------------------------------------------
@@ -215,11 +233,10 @@
         //----------------------------------------------------------------
         "TeamName"                  "DOTA_TEAM_NEUTRALS"                        // Team name.
         "CombatClassAttack"         "DOTA_COMBAT_CLASS_ATTACK_PIERCE"
-        "CombatClassDefend"         "DOTA_COMBAT_CLASS_DEFEND_BASIC"
+        "CombatClassDefend"         "DOTA_COMBAT_CLASS_DEFEND_STRONG"
         "UnitRelationshipClass"     "DOTA_NPC_UNIT_RELATIONSHIP_TYPE_DEFAULT"
 
         "ParticleFile"              "particles/units/heroes/hero_techies.pcf"
-        "GameSoundsFile"            "scripts/game_sounds_heroes/game_sounds_sniper.txt"
         "VoiceFile"                 "scripts/voscripts/game_sounds_vo_sniper.txt"
 
         // Creature Data
@@ -253,7 +270,8 @@
         "Model" "models/heroes/kunkka/kunkka.mdl"
         "BaseClass" "npc_dota_creature"
         "ModelScale" "0.51"
-        "SoundSet"                  "Hero_Techies"
+        "SoundSet"                     "Hero_Kunkka"
+        "GameSoundsFile"               "soundevents/game_sounds_heroes/game_sounds_kunkka.vsndevts"
         "Level"                     "25"
         "UnitLabel"         "General"
 
@@ -267,7 +285,12 @@
         "AttackRange"               "50"       // Range within a target can be attacked.
         "ProjectileModel"           "" // Particle system model for projectile.
         "ProjectileSpeed"           ""      // Speed of projectile. 
-        "PathfindingSearchDepthScale"     "0.1"         
+        "PathfindingSearchDepthScale"     "0.1"   
+        "AutoAttacksByDefault"         "1"       
+        "HasAggressiveStance"         "1"
+
+        "AbilityLayout"               "4"
+        "Ability1"              "general_warcry"
 
         // Bounds
         //----------------------------------------------------------------
@@ -289,8 +312,8 @@
         //----------------------------------------------------------------
         "StatusHealth"              "500"        // Base health.
         "StatusHealthRegen"         "0.5"       // Health regeneration rate.
-        "StatusMana"                "0"         // Base mana.
-        "StatusManaRegen"           "0.0"       // Mana regeneration rate.       
+        "StatusMana"                "100"         // Base mana.
+        "StatusManaRegen"           "1.0"       // Mana regeneration rate.       
 
         // Vision
         //----------------------------------------------------------------
@@ -301,12 +324,11 @@
         // Team
         //----------------------------------------------------------------
         "TeamName"                  "DOTA_TEAM_NEUTRALS"                        // Team name.
-        "CombatClassAttack"         "DOTA_COMBAT_CLASS_ATTACK_PIERCE"
-        "CombatClassDefend"         "DOTA_COMBAT_CLASS_DEFEND_BASIC"
+        "CombatClassAttack"         "DOTA_COMBAT_CLASS_ATTACK_BASIC"
+        "CombatClassDefend"         "DOTA_COMBAT_CLASS_DEFEND_STRONG"
         "UnitRelationshipClass"     "DOTA_NPC_UNIT_RELATIONSHIP_TYPE_DEFAULT"
 
         "ParticleFile"              "particles/units/heroes/hero_techies.pcf"
-        "GameSoundsFile"            "scripts/game_sounds_heroes/game_sounds_sniper.txt"
         "VoiceFile"                 "scripts/voscripts/game_sounds_vo_sniper.txt"
 
         // Creature Data

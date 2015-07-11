@@ -273,6 +273,74 @@
     "AbilityTextureName"            "rubick_empty1"
   }
 
+  "general_warcry"
+  {
+      // General  
+      // ----------------------------------------------------------------------------------------
+      "BaseClass"              "ability_datadriven"
+      "AbilityBehavior"        "DOTA_ABILITY_BEHAVIOR_NO_TARGET"
+      "AbilityTextureName"     "sven_warcry"
+      "AbilityUnitTargetTeam"  "DOTA_UNIT_TARGET_TEAM_FRIENDLY"
+      "AbilityUnitTargetType"  "DOTA_UNIT_TARGET_HERO | DOTA_UNIT_TARGET_BASIC"
+      "AbilityUnitTargetFlags" "DOTA_UNIT_TARGET_FLAG_MAGIC_IMMUNE_ENEMIES"
+      "AbilityUnitDamageType"  "DAMAGE_TYPE_MAGICAL"
+
+      "AbilityType"            "DOTA_ABILITY_TYPE_BASIC"
+      "MaxLevel"               "1"
+      "RequiredLevel"          "-4"
+      "LevelsBetweenUpgrades"  "1"
+
+      "AbilityCastPoint"       "0.0"
+      "AbilityCastAnimation"   "ACT_DOTA_ATTACK"
+      "AnimationPlaybackRate"  "1"
+      "AnimationIgnoresModelScale" "1"
+
+      // Stats
+      //----------------------------------------------------------------------------------------
+      "AbilityDamage"           "0"
+      "AbilityManaCost"         "25"
+      "AbilityCooldown"         "30.0"
+      "AbilityCastRange"        "0"
+      "AbilityCastRangeBuffer"  "250"
+      "AbilityChannelTime"      "0.0"
+      "AbilityChannelledManaCostPerSecond" "0"
+      "AbilityDuration"         "5.0"
+      "AoERadius"               "500"
+
+      // Data Driven
+      //-------------------------------------------------------------------------------------
+      "OnSpellStart"
+      {
+          "ApplyModifier"
+          {
+              "Target"
+              {
+                  "Center" "CASTER"
+                  "Radius" "500"
+                  "Teams" "DOTA_UNIT_TARGET_TEAM_FRIENDLY"
+                  "Types" "DOTA_UNIT_TARGET_HERO | DOTA_UNIT_TARGET_BASIC"
+              }
+              "ModifierName" "Generals_Buff"
+           }
+      }
+
+      "Modifiers"
+      {
+        "Generals_Buff"
+        {
+            "Passive"                        "0"
+            "IsHidden"                        "0" 
+            "IsBuff"                "1"
+            "TextureName"             "sven_warcry"
+            "Duration"                    "5"   
+            "Properties"
+            {
+                "MODIFIER_PROPERTY_MOVESPEED_BONUS_CONSTANT"  "100"
+            }
+        }
+      }
+  }
+
 
   "human_train_rifleman"
   {

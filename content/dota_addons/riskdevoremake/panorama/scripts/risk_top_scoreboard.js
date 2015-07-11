@@ -1,11 +1,5 @@
 "use strict";
 
-
-
-// var curTimeDS = Game.GetGameTime() * 10;
-// var teamPanel = $.GetContextPanel();
-// playerPanel = $.CreatePanel( "Panel", playersContainer, playerPanelName );
-
 function OnPlayerAdded( data )
 {
 	$.Msg("Player Connected!!!");
