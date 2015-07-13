@@ -64,7 +64,10 @@ function GameMode:AllocateBases()
     for baseNumber = 1, totalBases do
       local teamNumber = self.teamNumbers[teamIndex]
       print (territory .. " " .. baseNumber)
-      local base = Entities:FindByName(nil, territory .. " " .. baseNumber)
+      local thisBase = Entities:FindByName(nil, territory .. " " .. baseNumber)
+      -- thisBase:Destroy()
+      local base = CreateUnitByName("base", thisBase:GetOrigin(), false, nil, nil, teamNumber)
+      -- base:SetUnitName(territory .. " " .. baseNumber)
       base:SetTeam(teamNumber)
       local color = TEAM_COLORS[teamNumber]
       base:SetRenderColor(color[1], color[2], color[3])
@@ -93,7 +96,22 @@ function GameMode:IncomeCheck()
   for territory, totalBases in pairs(self.territories) do
     allBaseNumber = totalBases + allBaseNumber
     local allTheSameTeam = true
-    local base = Entities:FindByName(nil, territory .. " " .. 1)
+    local baseEntity = Entities:FindByName(nil, territory .. " " .. 1)
+    local base = nil
+      
+    local entitiesNearBaseEntity = Entities:FindAllInSphere(baseEntity:GetOrigin(), 100)
+    for _,unit in pairs(entitiesNearBaseEntity) do
+      if unit:GetName() == "npc_dota_creature" then
+        if unit:GetUnitName() == "base" then
+          base = unit
+        end
+      end
+    end
+
+    if base == nil then
+      print("Couldn't find a base nearby " .. territory .. " " .. 1)
+    end
+
     local playerWhoMayOwnAllBases = base:GetOwner()
     local territorySpawn = Entities:FindByName(nil, territory .. " Territory")
     local territoryLabel = Entities:FindByName(nil, territory .. " Label")
@@ -103,7 +121,22 @@ function GameMode:IncomeCheck()
     end
     -- Update all of the bases in the territory
     for baseNumber = 2, totalBases do
-      local nextBase = Entities:FindByName(nil, territory .. " " .. baseNumber)
+      local nextBaseEntity = Entities:FindByName(nil, territory .. " " .. baseNumber)
+      local nextBase = nil
+      
+      local entitiesNearBaseEntity = Entities:FindAllInSphere(nextBaseEntity:GetOrigin(), 100)
+      for _,unit in pairs(entitiesNearBaseEntity) do
+        if unit:GetName() == "npc_dota_creature" then
+          if unit:GetUnitName() == "base" then
+            nextBase = unit
+          end
+        end
+      end
+
+      if nextBase == nil then
+        print("Couldn't find a base nearby " .. territory .. " " .. 1)
+      end
+
       -- If the territory is contested make the name white
       if nextBase:GetOwner() ~= playerWhoMayOwnAllBases then
         allTheSameTeam = false
@@ -173,8 +206,23 @@ function GameMode:OnPlayerPickHero(keys)
     -- Update all of the bases in the territory
     for baseNumber = 1, totalBases do
       local teamNumber = self.teamNumbers[teamIndex]
-      local base = Entities:FindByName(nil, territory .. " " .. baseNumber)
+      local baseEntity = Entities:FindByName(nil, territory .. " " .. baseNumber)
+      local base = nil
       
+      local entitiesNearBaseEntity = Entities:FindAllInSphere(baseEntity:GetOrigin(), 100)
+      for _,unit in pairs(entitiesNearBaseEntity) do
+        if unit:GetName() == "npc_dota_creature" then
+          if unit:GetUnitName() == "base" then
+            base = unit
+          end
+        end
+        
+      end
+
+      if base == nil then
+        print("Couldn't find a base nearby " .. territory .. " " .. 1)
+      end
+
       if base:GetTeam() == heroEntity:GetTeam() then
         base:SetOwner(heroEntity)
         base:SetControllableByPlayer(playerID, true)
@@ -193,7 +241,7 @@ function GameMode:_OnEntityKilled( keys )
   -- The Unit that was Killed
   local killedUnit = EntIndexToHScript( keys.entindex_killed )
   
-  if killedUnit:GetClassname() == "npc_dota_creature" then
+  if killedUnit:GetClassname() == "npc_dota_creature" and killedUnit:GetUnitName() ~= "base" then
     self.unitCount[killedUnit:GetOwner():GetPlayerID()] = self.unitCount[killedUnit:GetOwner():GetPlayerID()] - 1
 
     -- Let the UI know that the unit was killed
@@ -205,11 +253,13 @@ function GameMode:_OnEntityKilled( keys )
     CustomGameEventManager:Send_ServerToAllClients( "player_unit_count_changed", unitCountEventData )
   end
 
-  if killedUnit:GetClassname() ~= "npc_dota_building" then
+  if killedUnit:GetUnitName() ~= "base" then
     return
   end
 
+  local oldOrigin = killedUnit:GetOrigin()
   killedUnit:RespawnUnit()
+  killedUnit:SetOrigin(oldOrigin)
   -- Restore the base's health after a timer goes off to prevent your own units from damaging the base further
   GameRules:GetGameModeEntity():SetThink(function ()
    killedUnit:SetHealth(killedUnit:GetMaxHealth())
@@ -220,7 +270,7 @@ function GameMode:_OnEntityKilled( keys )
   local closestDistance = 10000000
   local entitiesNearKilled = Entities:FindAllInSphere(killedUnit:GetOrigin(), 1000)
   for _,unit in pairs(entitiesNearKilled) do
-    if unit:GetName() == "npc_dota_creature" then
+    if unit:GetName() == "npc_dota_creature" and unit:GetUnitName() ~= "base" then
         local circleOrigin = killedUnit:GetOrigin()
         local killerOrigin = unit:GetOrigin()
         local currentDistance = (killerOrigin[1] - circleOrigin[1]) * (killerOrigin[1] - circleOrigin[1]) + (killerOrigin[2] - circleOrigin[2]) * (killerOrigin[2] - circleOrigin[2])
