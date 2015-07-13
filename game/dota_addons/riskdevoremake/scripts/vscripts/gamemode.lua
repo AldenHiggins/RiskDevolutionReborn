@@ -189,8 +189,6 @@ function GameMode:InitGameMode()
   -- Disables shop
   mode:SetHUDVisible(6, false)
 
-
-
   print ("registering command")
   Convars:RegisterCommand( "ExampleCommand", function(name, p)
       --get the player that sent the command

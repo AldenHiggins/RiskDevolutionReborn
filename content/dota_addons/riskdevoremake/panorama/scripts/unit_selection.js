@@ -8,40 +8,44 @@ function OnUpdateSelectedUnit( event )
 	if (skip == true)
 	{
 		skip = false;
-		selectionOverriden = false;
-		$.Msg("skip")
+		// selectionOverriden = false;
+		// $.Msg("skip")
 		return
 	}
 
 	var iPlayerID = Players.GetLocalPlayer();
 	var selectedEntities = Players.GetSelectedEntities( iPlayerID );
 	var mainSelected = Players.GetLocalPlayerPortraitUnit();
+	selectionOverriden = false;
 
 	// $.Msg( "OnUpdateSelectedUnit, main selected index: "+mainSelected);
-	$.Msg( "Player "+iPlayerID+" Selected Entities ("+(selectedEntities.length)+")" );
+	// $.Msg( "Player "+iPlayerID+" Selected Entities ("+(selectedEntities.length)+")" );
+	// $.Msg(selectedEntities);
 	if (selectedEntities.length > 1 && IsMixedBuildingSelectionGroup(selectedEntities) )
 	{
-		$.Msg( "IsMixedBuildingSelectionGroup, proceeding to deselect the buildings and get only the units ")
-		$.Msg( "Number of selected entities: " , selectedEntities.length)
+		// $.Msg( "IsMixedBuildingSelectionGroup, proceeding to deselect the buildings and get only the units ")
+		// $.Msg( "Number of selected entities: " , selectedEntities.length)
 		for (var i = 0; i < selectedEntities.length; i++) 
 		{
-			$.Msg( "Iterating unit: ", Entities.GetUnitName(selectedEntities[i]));
+			// $.Msg( "Iterating unit: ", Entities.GetUnitName(selectedEntities[i]));
 			skip = true; // Makes it skip an update
 			if (!IsCustomBuilding(selectedEntities[i]) && !selectionOverriden)
 			{
-				$.Msg( "Starting");
+				// $.Msg( "Starting");
 				selectionOverriden = true;
-				GameUI.SelectUnit(selectedEntities[i], true);
+				GameUI.SelectUnit(selectedEntities[i], false);
+
+				// GameUI.SelectUnit(selectedEntities[i], false);
 				//$.Msg( "New selection group");
 			}
 			else if (!IsCustomBuilding(selectedEntities[i]))
 			{
-				$.Msg( "Selecting ")
+				// $.Msg( "Selecting ")
 				GameUI.SelectUnit(selectedEntities[i], true);
 			}
 			else if (selectionOverriden)
 			{
-				$.Msg( "Base found")
+				// $.Msg( "Base found")
 				// GameUI.SelectUnit(selectedEntities[i], true);
 				// skip = false;
 				// selectionOverriden = false;
@@ -88,23 +92,7 @@ function IsCustomBuilding( entityIndex )
 		return false
 }
 
-function OnNPCSpawned ( event )
-{
-	var npcIndex = event.entindex
-	var unitName = Entities.GetUnitName( npcIndex )
-	if (unitName.indexOf("base") != -1)
-	{
-		GameUI.SelectUnit(npcIndex, true);		
-	}
-}
-
-function OnUpdateQueryUnit( event )
-{
-	$.Msg( "OnUpdateQueryUnit" );
-}
 
 (function () {
-	// GameEvents.Subscribe( "npc_spawned", OnNPCSpawned );
 	GameEvents.Subscribe( "dota_player_update_selected_unit", OnUpdateSelectedUnit );
-	// GameEvents.Subscribe( "dota_player_update_query_unit", OnUpdateQueryUnit );
 })();

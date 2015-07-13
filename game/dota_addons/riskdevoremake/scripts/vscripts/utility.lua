@@ -347,5 +347,4 @@ function RecolorUnit(unit, color)
     unit:GetChildren()[2]:SetRenderColor(color[1], color[2], color[3])
     unit:GetChildren()[3]:SetRenderColor(color[1], color[2], color[3])
   end
-
 end
