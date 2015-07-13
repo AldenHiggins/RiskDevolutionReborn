@@ -329,6 +329,11 @@ function RecolorUnit(unit, color)
     unit:GetChildren()[4]:SetRenderColor(color[1], color[2], color[3])
     unit:GetChildren()[5]:SetRenderColor(color[1], color[2], color[3])
   elseif unit:GetUnitName() == "npc_dota_risk_medic" then
+    -- Set up autocasting
+    local heal = unit:GetAbilityByIndex(0)
+    heal:ToggleAutoCast()
+    -- Recolor the unit
+    unit:SetRenderColor(color[1], color[2], color[3])
     unit:GetChildren()[4]:SetRenderColor(color[1], color[2], color[3])
     -- Who knows
     unit:GetChildren()[1]:SetRenderColor(color[1], color[2], color[3])
