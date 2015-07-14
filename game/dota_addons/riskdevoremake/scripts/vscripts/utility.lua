@@ -35,11 +35,23 @@ function GetInitialRallyPoint( event )
     return result
 end
 
+function GetUnitTypeCost(unit)
+  if unit:GetUnitName() == "npc_dota_risk_mortar" then
+    return 3
+  elseif unit:GetUnitName() == "npc_dota_risk_medic" then
+    return 5
+  elseif unit:GetUnitName() == "npc_dota_risk_general" then
+    return 10
+  else
+    return 1
+  end 
+end
+
 function GameMode:CheckUnitCount(playerID, player, target)
     print ("This player has: " .. self.unitCount[playerID] .. " many units")
     if self.unitCount[playerID] > UNITS_PER_PLAYER then
+        PlayerResource:SetGold(playerID, PlayerResource:GetGold(playerID) + GetUnitTypeCost(target), true)
         target:RemoveSelf()
-        PlayerResource:SetGold(playerID, PlayerResource:GetGold(playerID) + 1, true)
         GameRules:SendCustomMessage("You have too many units!  Clear up some space for new ones!", player:GetTeam(), 1);
         return false
     end
@@ -312,6 +324,10 @@ function HealAutocast( event )
   local ability = event.ability
 
   -- Get if the ability is on autocast mode and cast the ability on the attacked target if it doesn't have the modifier
+  if ability == nil then
+    return
+  end
+
   if ability:GetAutoCastState() then
     caster:CastAbilityOnTarget(target, ability, caster:GetPlayerOwnerID())
   end 

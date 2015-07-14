@@ -283,7 +283,7 @@
       // ----------------------------------------------------------------------------------------
       "BaseClass"              "ability_datadriven"
       "AbilityBehavior"       "DOTA_ABILITY_BEHAVIOR_UNIT_TARGET | DOTA_ABILITY_BEHAVIOR_DONT_RESUME_ATTACK | DOTA_ABILITY_BEHAVIOR_AUTOCAST"
-      "AbilityTextureName"     "forest_troll_priest_heal"
+      "AbilityTextureName"     "omniknight_purification"
       "AbilityUnitTargetTeam"  "DOTA_UNIT_TARGET_TEAM_FRIENDLY"
       "AbilityUnitTargetType"  "DOTA_UNIT_TARGET_HERO | DOTA_UNIT_TARGET_BASIC"
       "AbilityUnitTargetFlags" "DOTA_UNIT_TARGET_FLAG_MAGIC_IMMUNE_ENEMIES"
@@ -615,7 +615,7 @@
   "human_train_medic"
   {
     "BaseClass"             "ability_datadriven"
-    "AbilityTextureName"    "crystal_maiden_brilliance_aura"
+    "AbilityTextureName"    "omniknight_guardian_angel"
     "MaxLevel"              "1"
  
     "AbilityBehavior"    "DOTA_ABILITY_BEHAVIOR_NO_TARGET"

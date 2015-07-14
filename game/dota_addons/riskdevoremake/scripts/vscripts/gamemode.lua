@@ -136,6 +136,8 @@ function GameMode:InitGameMode()
   self.territories["Netherlands"] = 2
   self.territories["Germany"] = 8
   self.territories["Denmark"] = 2
+  self.territories["UnitedKingdom"] = 4
+  self.territories["Ireland"] = 2
   -- Eastern Europe
   self.territories["Greece"] = 4
   self.territories["Bosnia"] = 2
@@ -163,6 +165,11 @@ function GameMode:InitGameMode()
   self.territories["Georgia"] = 2
   self.territories["Poland"] = 5
   self.territories["Belarus"] = 4
+  self.territories["Estonia"] = 3
+  self.territories["Russia"] = 12
+  self.territories["Finland"] = 3
+  self.territories["Sweden"] = 4
+  self.territories["Norway"] = 2
 
   self.teamNumbers = {}
   self.teamNumbers[1] = 2
