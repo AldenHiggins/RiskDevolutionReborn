@@ -11,6 +11,7 @@ function MoveToRallyPoint( event )
     end
 
     target:SetOwner(hero)
+    target:SetControllableByPlayer(playerID, true)
 
     -- Recolor the unit you spawned
     local color = TEAM_COLORS[caster:GetTeam()]
@@ -203,12 +204,17 @@ function GameMode:OnPlayerPickHero(keys)
   local heroEntity = EntIndexToHScript(keys.heroindex)
   local player = EntIndexToHScript(keys.player)
   local playerID = heroEntity:GetPlayerID()
+  -- Set this player's health bar color
+  local teamID = PlayerResource:GetTeam( playerID )
+  local color = TEAM_COLORS[teamID]
+  heroEntity:SetCustomHealthLabel( GetTeamName( teamID ), color[1], color[2], color[3] )
   -- Add this player to the global list so we can get them later etc...
   self.players[playerID] = player
   self.playerIncomes[playerID] = 4
   -- Set this player's starting gold
   PlayerResource:SetGold(playerID, PLAYER_STARTING_GOLD, true)
   PlayerResource:SetGold(playerID, 0, false)
+  PlayerResource:SetCustomPlayerColor( playerID, color[1], color[2], color[3] )
 
   self.unitCount[playerID] = 0
 
@@ -236,8 +242,17 @@ function GameMode:OnPlayerPickHero(keys)
       end
 
       if base:GetTeam() == heroEntity:GetTeam() then
-        base:SetOwner(heroEntity)
-        base:SetControllableByPlayer(playerID, true)
+        -- Respawn the base correctly
+        local newBasePosition = base:GetOrigin()
+        local newBase = CreateUnitByName("base", base:GetOrigin(), true, heroEntity, heroEntity, heroEntity:GetTeamNumber())
+        newBase:SetOwner(heroEntity)
+        newBase:SetControllableByPlayer(playerID, true)
+        local color = TEAM_COLORS[teamID]
+        newBase:SetRenderColor(color[1], color[2], color[3])
+
+        base:Destroy()
+        -- base:SetOwner(heroEntity)
+        -- base:SetControllableByPlayer(playerID, true)
       end
 
       teamIndex = teamIndex + 1
@@ -332,6 +347,24 @@ function HealAutocast( event )
     caster:CastAbilityOnTarget(target, ability, caster:GetPlayerOwnerID())
   end 
 end
+
+-- Revamp recoloring to be like this
+-- local color = GameMode:ColorForTeam( teamID )
+-- for k, v in pairs(unit:GetChildren()) do 
+--   if v:GetClassname() == "dota_item_wearable" then
+--     local model = v:GetModelName()
+--     --print(v:GetModelName())
+--     if (not string.match(model, "luna_head") and not string.match(model, "dragon_knight/weapon") and not string.match(model, "weaver_head") 
+--     and not string.match(model, "weaver_legs") and not string.match(model, "weaver_arms") and not string.match(model, "weapon") and not string.match(model, "windrunner_bow") 
+--     and not string.match(model, "huskar_spear") and not string.match(model, "huskar_dagger") and not string.match(model, "mount") and not string.match(model, "windrunner_quiver") 
+--     and not string.match(model, "furion_staff") and not string.match(model, "furion_horns") and not string.match(model, "blood_chaser") and not string.match(model, "pugna_head")
+--     and not string.match(model, "pugna_shoulder") and not string.match(model, "buttercup") and not string.match(model, "leftarm") and not string.match(model, "righthook")
+--     and not string.match(model, "enchantress_hair") and not string.match(model, "knight_mace") and not string.match(model, "horse_foretold") ) then
+--       v:SetRenderColor(color[1], color[2], color[3])
+--     end
+--   end 
+-- end
+
 
 function RecolorUnit(unit, color)
   print ("Recoloring: " .. unit:GetUnitName())

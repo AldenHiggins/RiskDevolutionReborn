@@ -44,6 +44,7 @@ function Precache( context )
   PrecacheUnitByNameSync("npc_dota_risk_general", context)
   PrecacheUnitByNameSync("npc_dota_risk_rifleman", context)
   PrecacheUnitByNameSync("npc_dota_risk_mortar", context)
+  PrecacheUnitByNameSync("npc_dota_risk_medic", context)
   PrecacheUnitByNameSync("base", context)
   PrecacheUnitByNameSync("map_label", context)
 end
