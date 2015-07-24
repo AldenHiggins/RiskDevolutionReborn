@@ -207,7 +207,6 @@ function GameMode:OnPlayerPickHero(keys)
   -- Set this player's health bar color
   local teamID = PlayerResource:GetTeam( playerID )
   local color = TEAM_COLORS[teamID]
-  heroEntity:SetCustomHealthLabel( GetTeamName( teamID ), color[1], color[2], color[3] )
   -- Add this player to the global list so we can get them later etc...
   self.players[playerID] = player
   self.playerIncomes[playerID] = 4

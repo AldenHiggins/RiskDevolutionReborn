@@ -13,7 +13,7 @@
 		<Panel class="VictoryPanel" id="VicPanel">
 			<Label id="Title" text="Risk Europe" />
 			<Label id="Goal" text="Income to win:" />
-			<Label id="VictoryPoints" text="100" />
+			<Label id="VictoryPoints" text="70" />
 			<Label id="Timer" text="--:--" />
 		</Panel>
 
