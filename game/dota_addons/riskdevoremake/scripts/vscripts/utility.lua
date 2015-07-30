@@ -53,7 +53,7 @@ function GameMode:CheckUnitCount(playerID, player, target)
     if self.unitCount[playerID] > UNITS_PER_PLAYER then
         PlayerResource:SetGold(playerID, PlayerResource:GetGold(playerID) + GetUnitTypeCost(target), true)
         target:RemoveSelf()
-        GameRules:SendCustomMessage("You have too many units!  Clear up some space for new ones!", player:GetTeam(), 1);
+        CustomGameEventManager:Send_ServerToPlayer(PlayerResource:GetPlayer(playerID), "player_unit_cap_reached", nil)
         return false
     end
     self.unitCount[playerID] = self.unitCount[playerID] + 1

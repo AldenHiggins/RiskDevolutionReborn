@@ -9,7 +9,7 @@
 	<script>
 		$.Msg( "Compiled Panorama Scripts!!!" );
 	</script>
-	<Panel class="RiskScoreBoard">
+	<Panel class="RiskScoreBoard" hittest = "false">
 		<Panel class="VictoryPanel" id="VicPanel">
 			<Label id="Title" text="Risk Europe" />
 			<Label id="Goal" text="Income to win:" />

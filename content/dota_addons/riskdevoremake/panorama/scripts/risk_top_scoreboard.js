@@ -75,6 +75,13 @@ function UpdateTimer( args )
 	playerPanel.text = minutesAndSeconds; 
 }
 
+function UnitCapReached( args )
+{
+	var unitCapMessage = $.CreatePanel("Label", $.GetContextPanel(), "UnitCapMessage");
+	unitCapMessage.text = "You have too many units!  Clear up some space for new ones!";
+	unitCapMessage.DeleteAsync(5);
+}
+
 (function () {
 	$.Msg("Running the scoreboard script!!!");
 
@@ -82,4 +89,5 @@ function UpdateTimer( args )
 	GameEvents.Subscribe("dota_player_pick_hero", OnPlayerAdded);
 	GameEvents.Subscribe("player_unit_count_changed", OnUnitCountChange);
 	GameEvents.Subscribe("player_income_changed", OnIncomeChange);
+	GameEvents.Subscribe("player_unit_cap_reached", UnitCapReached);
 })();

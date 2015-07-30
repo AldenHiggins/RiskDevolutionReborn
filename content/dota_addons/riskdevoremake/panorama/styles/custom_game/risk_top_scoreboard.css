@@ -1,9 +1,8 @@
 
 .RiskScoreBoard
 {
-    height: 10%;
-    margin-left : 450px;
-    border-right: 5px solid transparent;
+    height: 100%;
+    width: 100%;
 }
 
 .TestImage
@@ -19,11 +18,12 @@
 	background-repeat: no-repeat;
 	background-position: 50% 50%;
 	background-size: 100% 100%;
+	position: 15% 0% 0px;
 }
 
 .PlayersPanel
 {
-	margin-left: 180px;
+	position: 25% 0% 0px;
 	flow-children: right;
 }
 
@@ -37,6 +37,18 @@
 	width: 60px;
 	height: 40px;
 	flow-children: none;
+}
+
+#UnitCapMessage
+{
+	width: 400px;
+	height: 40px;
+	flow-children: none;
+	text-transform: uppercase;
+	text-align: center;
+	position: 40% 70% 0px;
+	font-weight: bold;
+    font-size: 16px;
 }
 
 #Title
