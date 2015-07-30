@@ -366,7 +366,6 @@ end
 
 
 function RecolorUnit(unit, color)
-  print ("Recoloring: " .. unit:GetUnitName())
   if unit:GetUnitName() == "npc_dota_risk_rifleman" then
     unit:SetRenderColor(color[1], color[2], color[3])
     unit:GetChildren()[1]:SetRenderColor(color[1], color[2], color[3])
@@ -383,8 +382,6 @@ function RecolorUnit(unit, color)
     -- Recolor the unit
     unit:SetRenderColor(color[1], color[2], color[3])
     unit:GetChildren()[4]:SetRenderColor(color[1], color[2], color[3])
-    -- Who knows
-    unit:GetChildren()[1]:SetRenderColor(color[1], color[2], color[3])
     -- Bracers cloak and weapon
     unit:GetChildren()[2]:SetRenderColor(color[1], color[2], color[3])
     unit:GetChildren()[3]:SetRenderColor(color[1], color[2], color[3])
@@ -396,7 +393,6 @@ function RecolorUnit(unit, color)
     unit:GetChildren()[5]:SetRenderColor(color[1], color[2], color[3])
     unit:GetChildren()[6]:SetRenderColor(color[1], color[2], color[3])
     -- Hat and sword
-    unit:GetChildren()[1]:SetRenderColor(color[1], color[2], color[3])
     unit:GetChildren()[2]:SetRenderColor(color[1], color[2], color[3])
     unit:GetChildren()[3]:SetRenderColor(color[1], color[2], color[3])
   end
