@@ -365,6 +365,38 @@ end
 -- end
 
 
+
+-- Also can be used to create fake players
+-- Convars:RegisterCommand('fake', function()
+--     -- Check if the server ran it
+--     if not Convars:GetCommandClient() then
+--       -- Create fake Players
+--       SendToServerConsole('dota_create_fake_clients')
+
+--       Timers:CreateTimer('assign_fakes', {
+--           useGameTime = false,
+--           endTime = Time(),
+--           callback = function(dotacraft, args)
+--           local userID = 20
+--           for i=0, 9 do
+--             userID = userID + 1
+--               -- Check if this player is a fake one
+--               if PlayerResource:IsFakeClient(i) then
+--                   -- Grab player instance
+--                   local ply = PlayerResource:GetPlayer(i)
+--                   -- Make sure we actually found a player instance
+--                 if ply then
+--                     CreateHeroForPlayer('npc_dota_hero_axe', ply)
+--                     self:OnConnectFull({ userid = userID, index = ply:entindex()-1 })
+--                     ply:GetAssignedHero():SetControllableByPlayer(0, true)
+--               end
+--               end
+--           end
+--       end})
+--     end
+--   end, 'Connects and assigns fake Players.', 0)
+
+
 function RecolorUnit(unit, color)
   if unit:GetUnitName() == "npc_dota_risk_rifleman" then
     unit:SetRenderColor(color[1], color[2], color[3])
