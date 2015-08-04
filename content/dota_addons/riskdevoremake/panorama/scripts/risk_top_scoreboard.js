@@ -57,6 +57,10 @@ function OnIncomeChange( args )
 {
 	var playerPanelName = "PlayerScoreBoardPanel" + args['playerID'];
 	var playerPanel = $.GetContextPanel().FindChild("PlayerContainer").FindChild(playerPanelName);
+	if (playerPanel == null)
+	{
+		OnPlayerAdded( null );
+	}
 	var playerIncome = playerPanel.FindChild("PlayerIncome");
 	var newText = args['newIncome'];
 	playerIncome.text = newText;
