@@ -103,43 +103,59 @@ function UnitCapReached( args )
 
 function OnPlayerDisconnect( data )
 {
-	$.Msg("This player disconnected: ", data['userid'], " : ", data['disconnect']);
-
-	var playerIDs = Game.GetPlayerIDsOnTeam(data['oldteam']);
-	$.Msg("This player's team: ", data['oldteam']);
-	$.Msg("This player's id: ", playerIDs[0]);	
+	$.Msg("This player changed connection status: ", data['userid'], " : ", data['disconnect']);
+	var playerID;
+	var showPlayerStats = true;
+	var showDisconnectImage = false;
+	// Handle the player disconnecting
+	if (data['disconnect'])
+	{
+		var playerIDs = Game.GetPlayerIDsOnTeam(data['oldteam']);
+		playerID = playerIDs[0];
+		showPlayerStats = false;
+		showDisconnectImage = true;
+	}
+	else
+	{
+		var playerIDs = Game.GetPlayerIDsOnTeam(data['team']);
+		playerID = playerIDs[0];
+	}
+	
+	$.Msg("This player's id: ", playerID);	
 	// Get the player's income panel and set it to 0
-	var playerPanelName = "PlayerScoreBoardPanel" + playerIDs[0];
+	var playerPanelName = "PlayerScoreBoardPanel" + playerID;
 	var playerPanel = $.GetContextPanel().FindChild("PlayerContainer").FindChild(playerPanelName);
 	var playerIncome = playerPanel.FindChild("PlayerIncome");
 	var newText = 0;
 	playerIncome.text = newText;
-	playerIncome.visible = false;
+	playerIncome.visible = showPlayerStats;
 	var playerFood = playerPanel.FindChild("PlayerUnitCount");
-	playerFood.visible = false;
+	playerFood.visible = showPlayerStats;
 	var foodImage = playerPanel.FindChild("FoodImage");
-	foodImage.visible = false;
+	foodImage.visible = showPlayerStats;
 	var goldImage = playerPanel.FindChild("GoldImage");
-	goldImage.visible = false;
+	goldImage.visible = showPlayerStats;
 	var disconnectImage = playerPanel.FindChild("DisconnectImage");
-	disconnectImage.visible = true;
+	disconnectImage.visible = showDisconnectImage;
+}
 
-	// // Update the new order of the incomes
-	// var playerContainer = $.GetContextPanel().FindChild("PlayerContainer");
-	// var playerIncomeIndex;
-	// for (playerIncomeIndex = 0; playerIncomeIndex < playerContainer.GetChildCount(); playerIncomeIndex++)
-	// {
-	// 	var playerIncomePanel = playerContainer.GetChild(playerIncomeIndex);
-	// 	var thisPlayersIncome = playerIncomePanel.FindChild("PlayerIncome").text;
-	// 	$.Msg("Income of this player: ", playerIncomeIndex, " is: " , thisPlayersIncome);
-	// 	if ( playerIncome > thisPlayersIncome )
-	// 	{
-	// 		$.Msg("Moving the updated player's income before this one");
-	// 		playerContainer.MoveChildBefore(playerPanel, playerIncomePanel);
-	// 		break;
-	// 	}
-	// }
+function OnPlayerReconnect( data )
+{
+	var playerID = data['PlayerID'];
+	$.Msg("This player: ", playerID, " reconnected!");
 
+	var playerPanelName = "PlayerScoreBoardPanel" + playerID;
+	var playerPanel = $.GetContextPanel().FindChild("PlayerContainer").FindChild(playerPanelName);
+	var playerIncome = playerPanel.FindChild("PlayerIncome");
+	playerIncome.visible = true;
+	var playerFood = playerPanel.FindChild("PlayerUnitCount");
+	playerFood.visible = true;
+	var foodImage = playerPanel.FindChild("FoodImage");
+	foodImage.visible = true;
+	var goldImage = playerPanel.FindChild("GoldImage");
+	goldImage.visible = true;
+	var disconnectImage = playerPanel.FindChild("DisconnectImage");
+	disconnectImage.visible = false;
 }
 
 (function () {
@@ -151,4 +167,6 @@ function OnPlayerDisconnect( data )
 	GameEvents.Subscribe("player_income_changed", OnIncomeChange);
 	GameEvents.Subscribe("player_unit_cap_reached", UnitCapReached);
 	GameEvents.Subscribe("player_team", OnPlayerDisconnect);
+	GameEvents.Subscribe("player_reconnected", OnPlayerReconnect);
+
 })();

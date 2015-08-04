@@ -152,10 +152,9 @@
 
 #DisconnectImage
 {
-	width: 60px;
+	width: 40px;
 	height: 40px;
-/*	margin-left: 2px;
-	margin-top: 2px;*/
+	margin-left: 7px;
 
 	background-image: url("file://{images}/custom_game/RedX.png");
 	background-repeat: no-repeat;
