@@ -19,7 +19,6 @@ function MoveToRallyPoint( event )
     RecolorUnit(target, color)
     -- target:SetRenderColor(color[1], color[2], color[3])
     -- target:GetChildren()[3]:SetRenderColor(color[1], color[2], color[3])
-
 end
 
 function GetInitialRallyPoint( event )
@@ -103,6 +102,8 @@ function GameMode:IncomeCheck()
   for playerID,player in pairs(self.players) do
     self.playerIncomes[playerID] = BASE_PLAYER_INCOME
   end
+  -- Play a gold sound to let players know they are receiving income
+  EmitGlobalSound("General.CoinsBig")
 
   local allBaseNumber = 0
   -- Iterate through all of the territories
@@ -192,6 +193,27 @@ function GameMode:IncomeCheck()
       end
     end
   end
+
+  -- Create a countdown
+  Timers:CreateTimer(TURN_TIME - 3,
+    function()
+      EmitGlobalSound("General.CastFail_AbilityInCooldown")
+      return
+  end)
+
+  Timers:CreateTimer(TURN_TIME - 2,
+    function()
+      EmitGlobalSound("General.CastFail_AbilityInCooldown")
+      return
+  end)
+
+  Timers:CreateTimer(TURN_TIME - 1,
+    function()
+      EmitGlobalSound("General.CastFail_AbilityInCooldown")
+      return
+  end)
+
+
   return TURN_TIME
 end
 
@@ -251,28 +273,9 @@ function GameMode:OnPlayerPickHero(keys)
         newBase:SetControllableByPlayer(playerID, true)
         local color = TEAM_COLORS[teamID]
         newBase:SetRenderColor(color[1], color[2], color[3])
-
-        -- GameRules:GetGameModeEntity():SetThink(function ()
-        --   local basePosition = newBase:GetOrigin()
-        --   local pingMapEventData =
-        --   {
-        --     x = basePosition[0],
-        --     y = basePosition[1],
-        --     z = basePosition[2],
-        --   }
-        --   CustomGameEventManager:Send_ServerToPlayer(player, "ping_map", pingMapEventData )
-        -- end, "", 1)
-  
+        
+        -- Insert this base into the list that will be pinged later on
         table.insert(pingPositions, newBase:GetOrigin())
-        -- local basePosition = newBase:GetOrigin()
-
-        -- local pingMapEventData =
-        -- {
-        --   x = basePosition[1],
-        --   y = basePosition[2],
-        --   z = basePosition[3],
-        -- }
-        -- CustomGameEventManager:Send_ServerToPlayer(player, "ping_map", pingMapEventData )
 
         -- Set the players' camera on one of their bases
         if cameraSet == false then
