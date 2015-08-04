@@ -188,6 +188,7 @@ function GameMode:IncomeCheck()
 
       -- Check to see if the player has won the game
       if self.playerIncomes[playerID] > INCOME_TO_WIN then
+        EmitGlobalSound("crowd.lv_02")
         GameRules:SetSafeToLeave( true )
         GameRules:SetGameWinner( player:GetTeam() )
       end
