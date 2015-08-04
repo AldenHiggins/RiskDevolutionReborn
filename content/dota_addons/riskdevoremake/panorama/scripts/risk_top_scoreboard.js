@@ -143,24 +143,6 @@ function OnPlayerDisconnect( data )
 	disconnectImage.visible = showDisconnectImage;
 }
 
-function OnPlayerReconnect( data )
-{
-	var playerID = data['PlayerID'];
-	$.Msg("This player: ", playerID, " reconnected!");
-
-	var playerPanelName = "PlayerScoreBoardPanel" + playerID;
-	var playerPanel = $.GetContextPanel().FindChild("PlayerContainer").FindChild(playerPanelName);
-	var playerIncome = playerPanel.FindChild("PlayerIncome");
-	playerIncome.visible = true;
-	var playerFood = playerPanel.FindChild("PlayerUnitCount");
-	playerFood.visible = true;
-	var foodImage = playerPanel.FindChild("FoodImage");
-	foodImage.visible = true;
-	var goldImage = playerPanel.FindChild("GoldImage");
-	goldImage.visible = true;
-	var disconnectImage = playerPanel.FindChild("DisconnectImage");
-	disconnectImage.visible = false;
-}
 
 (function () {
 	$.Msg("Running the scoreboard script!!!");
@@ -171,6 +153,4 @@ function OnPlayerReconnect( data )
 	GameEvents.Subscribe("player_income_changed", OnIncomeChange);
 	GameEvents.Subscribe("player_unit_cap_reached", UnitCapReached);
 	GameEvents.Subscribe("player_team", OnPlayerDisconnect);
-	GameEvents.Subscribe("player_reconnected", OnPlayerReconnect);
-
 })();
