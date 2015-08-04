@@ -207,6 +207,49 @@ function GameMode:InitGameMode()
   end, "A player buys an ability point", 0 )
   print ("done registering command")
   DebugPrint('[BAREBONES] Done loading Barebones gamemode!\n\n')
+
+
+
+  -- Also can be used to create fake players
+  Convars:RegisterCommand('fake', function()
+      print ("Fake command used")
+      -- Check if the server ran it
+      if Convars:GetCommandClient() then
+        print ("This is happening")
+        -- Create fake Players
+        SendToServerConsole('dota_create_fake_clients')
+
+        local userID = 20
+        print("Timer function called")
+        for i=0, 9 do
+          userID = userID + 1
+          print ("Checking id: ", userID)
+          -- Check if this player is a fake one
+          if PlayerResource:IsFakeClient(i) then
+            print ("Player is fake client")
+              -- Grab player instance
+            local ply = PlayerResource:GetPlayer(i)
+            ply:SetTeam(self.teamNumbers[i + 1])
+              -- Make sure we actually found a player instance
+            if ply then
+              print ("Got the player to make a hero for")
+              CreateHeroForPlayer('npc_dota_hero_axe', ply)
+              self:OnConnectFull({ userid = userID, index = ply:entindex()-1 })
+              ply:GetAssignedHero():SetControllableByPlayer(0, true)
+            end
+          end
+        end
+      end
+  end, 'Connects and assigns fake Players.', 0)
+
+  -- Also can be used to create fake players
+  Convars:RegisterCommand('disconnectBot', function()
+      print ("Disconnecting player...")
+      local playerToDisconnect = PlayerResource:GetPlayer(3)
+      playerToDisconnect:Kill()
+  end, 'Disconnect a player', 0)
+
+  
 end
 
 function GameMode:ExampleFunction (playerPerformedCommand, p)

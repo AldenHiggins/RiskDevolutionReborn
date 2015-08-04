@@ -38,6 +38,8 @@ function OnPlayerAdded( data )
 		// Add the resource icons to this panel
 		var foodImage = $.CreatePanel("Image", newPlayerPanel, "FoodImage");
 		var goldImage = $.CreatePanel("Image", newPlayerPanel, "GoldImage");
+		var disconnectImage = $.CreatePanel("Image", newPlayerPanel, "DisconnectImage");
+		disconnectImage.visible = false;
 	}
 }
 
@@ -103,8 +105,8 @@ function OnPlayerDisconnect( data )
 {
 	$.Msg("This player disconnected: ", data['userid'], " : ", data['disconnect']);
 
-	var playerIDs = Game.GetPlayerIDsOnTeam(data['team']);
-	$.Msg("This player's team: ", data['team']);
+	var playerIDs = Game.GetPlayerIDsOnTeam(data['oldteam']);
+	$.Msg("This player's team: ", data['oldteam']);
 	$.Msg("This player's id: ", playerIDs[0]);	
 	// Get the player's income panel and set it to 0
 	var playerPanelName = "PlayerScoreBoardPanel" + playerIDs[0];
@@ -112,6 +114,15 @@ function OnPlayerDisconnect( data )
 	var playerIncome = playerPanel.FindChild("PlayerIncome");
 	var newText = 0;
 	playerIncome.text = newText;
+	playerIncome.visible = false;
+	var playerFood = playerPanel.FindChild("PlayerUnitCount");
+	playerFood.visible = false;
+	var foodImage = playerPanel.FindChild("FoodImage");
+	foodImage.visible = false;
+	var goldImage = playerPanel.FindChild("GoldImage");
+	goldImage.visible = false;
+	var disconnectImage = playerPanel.FindChild("DisconnectImage");
+	disconnectImage.visible = true;
 
 	// // Update the new order of the incomes
 	// var playerContainer = $.GetContextPanel().FindChild("PlayerContainer");

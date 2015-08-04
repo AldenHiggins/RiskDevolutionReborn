@@ -149,3 +149,16 @@
 	background-position: 50% 50%;
 	background-size: 100% 100%;
 }
+
+#DisconnectImage
+{
+	width: 60px;
+	height: 40px;
+/*	margin-left: 2px;
+	margin-top: 2px;*/
+
+	background-image: url("file://{images}/custom_game/RedX.png");
+	background-repeat: no-repeat;
+	background-position: 50% 50%;
+	background-size: 100% 100%;
+}

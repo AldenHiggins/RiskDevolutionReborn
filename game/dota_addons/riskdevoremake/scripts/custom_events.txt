@@ -17,4 +17,9 @@
 	"player_unit_cap_reached"
 	{}
 
+	"player_disconnected"
+	{
+		"teamNumber"	"short"
+	}
+
 }
