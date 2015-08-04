@@ -22,4 +22,9 @@
 		"teamNumber"	"short"
 	}
 
+	"select_new_unit"
+	{
+		"entityIndex"	"short"
+	}
+
 }

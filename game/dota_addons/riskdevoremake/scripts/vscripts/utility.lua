@@ -217,6 +217,7 @@ function GameMode:OnPlayerPickHero(keys)
 
   self.unitCount[playerID] = 0
 
+  local cameraSet = false
   -- Search through bases to set the player's control to the correct one
   local teamIndex = 1
   for territory,totalBases in pairs(self.territories) do
@@ -249,6 +250,22 @@ function GameMode:OnPlayerPickHero(keys)
         local color = TEAM_COLORS[teamID]
         newBase:SetRenderColor(color[1], color[2], color[3])
 
+        -- Set the players' camera on one of their bases
+        if cameraSet == false then
+          cameraSet = true
+          PlayerResource:SetCameraTarget(playerID, newBase)
+          -- After a delay allow the player to control their camera again
+          GameRules:GetGameModeEntity():SetThink(function ()
+            PlayerResource:SetCameraTarget(playerID, nil)
+            -- Have the player select the base
+            local selectNewTargetEventData =
+            {
+              entityIndex = newBase:GetEntityIndex(),
+            }
+            CustomGameEventManager:Send_ServerToPlayer(player, "select_new_unit", selectNewTargetEventData )
+          end, "", 1)
+        end
+
         base:Destroy()
         -- base:SetOwner(heroEntity)
         -- base:SetControllableByPlayer(playerID, true)
@@ -260,6 +277,8 @@ function GameMode:OnPlayerPickHero(keys)
       end
     end
   end
+
+  heroEntity:Kill(nil, nil)
 end
 
 -- An entity died

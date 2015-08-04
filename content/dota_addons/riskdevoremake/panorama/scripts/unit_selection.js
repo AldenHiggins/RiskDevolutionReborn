@@ -92,7 +92,14 @@ function IsCustomBuilding( entityIndex )
 		return false
 }
 
+function SelectNewUnit( data )
+{
+	$.Msg("Selecting new unit for this player")
+	GameUI.SelectUnit(data['entityIndex'], false);
+}
+
 
 (function () {
 	GameEvents.Subscribe( "dota_player_update_selected_unit", OnUpdateSelectedUnit );
+	GameEvents.Subscribe( "select_new_unit", SelectNewUnit );
 })();
