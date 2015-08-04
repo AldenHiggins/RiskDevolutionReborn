@@ -106,7 +106,7 @@ function GameMode:OnGameInProgress()
     function()
       DebugPrint("This function is called 30 seconds after the game begins, and every 30 seconds thereafter")
       return 30.0 -- Rerun this timer every 30 game-time seconds 
-    end)
+  end)
 end
 
 

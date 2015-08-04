@@ -27,4 +27,10 @@
 		"entityIndex"	"short"
 	}
 
+	"ping_map"
+	{
+		"x"		"short"
+		"y"		"short"
+		"z"		"short"
+	}
 }

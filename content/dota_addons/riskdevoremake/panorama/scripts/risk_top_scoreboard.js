@@ -143,6 +143,13 @@ function OnPlayerDisconnect( data )
 	disconnectImage.visible = showDisconnectImage;
 }
 
+function PingLocation( data )
+{
+	$.Msg("Ping the map: ", data['x'], " ", data['y'], " ", data['z']);
+	var position = [data['x'], data['y'], data['z']]
+	GameUI.PingMinimapAtLocation( position );
+}
+
 
 (function () {
 	$.Msg("Running the scoreboard script!!!");
@@ -153,4 +160,5 @@ function OnPlayerDisconnect( data )
 	GameEvents.Subscribe("player_income_changed", OnIncomeChange);
 	GameEvents.Subscribe("player_unit_cap_reached", UnitCapReached);
 	GameEvents.Subscribe("player_team", OnPlayerDisconnect);
+	GameEvents.Subscribe("ping_map", PingLocation);
 })();

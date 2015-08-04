@@ -218,6 +218,8 @@ function GameMode:OnPlayerPickHero(keys)
   self.unitCount[playerID] = 0
 
   local cameraSet = false
+  -- Keep track of this player's base positions to ping them later
+  local pingPositions = {}
   -- Search through bases to set the player's control to the correct one
   local teamIndex = 1
   for territory,totalBases in pairs(self.territories) do
@@ -250,6 +252,28 @@ function GameMode:OnPlayerPickHero(keys)
         local color = TEAM_COLORS[teamID]
         newBase:SetRenderColor(color[1], color[2], color[3])
 
+        -- GameRules:GetGameModeEntity():SetThink(function ()
+        --   local basePosition = newBase:GetOrigin()
+        --   local pingMapEventData =
+        --   {
+        --     x = basePosition[0],
+        --     y = basePosition[1],
+        --     z = basePosition[2],
+        --   }
+        --   CustomGameEventManager:Send_ServerToPlayer(player, "ping_map", pingMapEventData )
+        -- end, "", 1)
+  
+        table.insert(pingPositions, newBase:GetOrigin())
+        -- local basePosition = newBase:GetOrigin()
+
+        -- local pingMapEventData =
+        -- {
+        --   x = basePosition[1],
+        --   y = basePosition[2],
+        --   z = basePosition[3],
+        -- }
+        -- CustomGameEventManager:Send_ServerToPlayer(player, "ping_map", pingMapEventData )
+
         -- Set the players' camera on one of their bases
         if cameraSet == false then
           cameraSet = true
@@ -267,8 +291,6 @@ function GameMode:OnPlayerPickHero(keys)
         end
 
         base:Destroy()
-        -- base:SetOwner(heroEntity)
-        -- base:SetControllableByPlayer(playerID, true)
       end
 
       teamIndex = teamIndex + 1
@@ -278,7 +300,48 @@ function GameMode:OnPlayerPickHero(keys)
     end
   end
 
+  
+  Timers:CreateTimer(2,
+    function()
+      if HELP_MESSAGES_POSTED == false then
+        GameRules:SendCustomMessage("Pinging all of the bases you control", 2, 1)
+      end
+      PingLocations(player, pingPositions)
+      return
+  end)
+
+  Timers:CreateTimer(4,
+    function()
+      if HELP_MESSAGES_POSTED == false then
+        GameRules:SendCustomMessage("TIP: Start by conquering smaller countries and snowball to victory", 2, 1)
+      end
+      PingLocations(player, pingPositions)
+      return
+  end)
+
+  Timers:CreateTimer(6,
+    function()
+      if HELP_MESSAGES_POSTED == false then
+        GameRules:SendCustomMessage("Good luck, have fun!", 2, 1)
+        HELP_MESSAGES_POSTED = true
+      end
+      PingLocations(player, pingPositions)
+      return
+  end)
+
   heroEntity:Kill(nil, nil)
+end
+
+function PingLocations( player, pingPositions )
+  for index, basePosition in pairs(pingPositions) do
+    local pingMapEventData =
+    {
+      x = basePosition[1],
+      y = basePosition[2],
+      z = basePosition[3],
+    }
+    CustomGameEventManager:Send_ServerToPlayer(player, "ping_map", pingMapEventData )
+  end
 end
 
 -- An entity died

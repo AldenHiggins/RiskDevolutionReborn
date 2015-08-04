@@ -94,7 +94,7 @@ function IsCustomBuilding( entityIndex )
 
 function SelectNewUnit( data )
 {
-	$.Msg("Selecting new unit for this player")
+	$.Msg("Selecting new unit for this player");
 	GameUI.SelectUnit(data['entityIndex'], false);
 }
 
