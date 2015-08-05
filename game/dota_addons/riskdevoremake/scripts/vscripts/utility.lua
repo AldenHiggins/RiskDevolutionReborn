@@ -222,7 +222,8 @@ end
 function GameMode:OnPlayerPickHero(keys)
   DebugPrint('[BAREBONES] OnPlayerPickHero')
   DebugPrintTable(keys)
-
+  -- Prevent the player from zooming in and messing up their view
+  SendToConsole("dota_camera_disable_zoom 1")
   local heroClass = keys.hero
   local heroEntity = EntIndexToHScript(keys.heroindex)
   local player = EntIndexToHScript(keys.player)
@@ -283,15 +284,17 @@ function GameMode:OnPlayerPickHero(keys)
           cameraSet = true
           PlayerResource:SetCameraTarget(playerID, newBase)
           -- After a delay allow the player to control their camera again
-          GameRules:GetGameModeEntity():SetThink(function ()
-            PlayerResource:SetCameraTarget(playerID, nil)
-            -- Have the player select the base
-            local selectNewTargetEventData =
-            {
-              entityIndex = newBase:GetEntityIndex(),
-            }
-            CustomGameEventManager:Send_ServerToPlayer(player, "select_new_unit", selectNewTargetEventData )
-          end, "", 1)
+          Timers:CreateTimer(1,
+            function()
+              PlayerResource:SetCameraTarget(playerID, nil)
+              -- Have the player select the base
+              local selectNewTargetEventData =
+              {
+                entityIndex = newBase:GetEntityIndex(),
+              }
+              CustomGameEventManager:Send_ServerToPlayer(player, "select_new_unit", selectNewTargetEventData )
+              return
+          end)
         end
 
         base:Destroy()
