@@ -222,8 +222,6 @@ end
 function GameMode:OnPlayerPickHero(keys)
   DebugPrint('[BAREBONES] OnPlayerPickHero')
   DebugPrintTable(keys)
-  -- Prevent the player from zooming in and messing up their view
-  SendToConsole("dota_camera_disable_zoom 1")
   local heroClass = keys.hero
   local heroEntity = EntIndexToHScript(keys.heroindex)
   local player = EntIndexToHScript(keys.player)

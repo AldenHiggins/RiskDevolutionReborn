@@ -100,6 +100,8 @@ end
 ]]
 function GameMode:OnGameInProgress()
   DebugPrint("[BAREBONES] The game has officially begun")
+  -- Prevent the player from zooming in and messing up their view
+  SendToConsole("dota_camera_disable_zoom 1")
   GameRules:GetGameModeEntity():SetThink( "IncomeCheck", self)
   GameRules:GetGameModeEntity():SetThink( "TimerFunction", self)
   Timers:CreateTimer(0, -- Start this timer 30 game-time seconds later
