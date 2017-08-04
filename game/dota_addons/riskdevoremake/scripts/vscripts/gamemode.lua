@@ -196,7 +196,7 @@ function GameMode:InitGameMode()
   -- Disables hero hud
   mode:SetHUDVisible(1, false)
   -- Disables shop
-  mode:SetHUDVisible(6, false)
+  --mode:SetHUDVisible(6, false)
 
   print ("registering command")
   Convars:RegisterCommand( "ExampleCommand", function(name, p)
